@@ -23,7 +23,7 @@ I focus on **creating web-based projects and games on Flux**, as well as buildin
 ## Skills & Languages
 
 - **HTML, CSS, JavaScript, Python, Swift**    
-- UI/UX prototyping with Figma  
+- **UI/UX prototyping with Figma**
 
 ---
 
