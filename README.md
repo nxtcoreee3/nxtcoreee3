@@ -16,7 +16,7 @@ I focus on **creating web-based projects and games on Flux**, as well as buildin
 
 ## GitHub Activity
 
-[![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=nxtcoreee3&bg_color=ffffff&color=000000&line=9be9a8&point=40c463&area=true&hide_border=true)]
+![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=nxtcoreee3&bg_color=ffffff&color=000000&line=9be9a8&point=40c463&area=true&hide_border=true)
 ---
 
 ## Skills & Languages
