@@ -31,7 +31,7 @@ I focus on **creating web-based projects and games on Flux**, as well as buildin
 
 ### Web / Flux
 - **Flux HTML5 Games & Apps** — https://nxtcoreee3.github.io/Flux/  
-- **Figma Prototypes** — interactive designs that go viral on TikTok  
+- **Figma Prototypes** — interactive designs available on Tweakbreak
 
 ---
 
