@@ -45,4 +45,4 @@ I focus on **making useful iOS apps and exploits**, as well as building **Figma 
 
 ## Focus
 
-Creating engaging HTML5 games, web apps, and viral Figma prototypes on Flux.
+Exploiting the newly released iOS 27 with apps and restore methods.
