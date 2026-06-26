@@ -6,7 +6,7 @@ HTML5 Developer | Flux Creator | Figma Prototype Designer
 
 ## About
 
-I focus on **creating web-based projects and games on Flux**, as well as building **Figma prototypes.** 
+I focus on **making useful iOS apps and exploits**, as well as building **Figma prototypes.** 
 
 - Developing **HTML5 games and apps on Flux**  
 - Designing interactive **Figma prototypes** for mobile and web  
