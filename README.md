@@ -1,48 +1,26 @@
-# nxtcoreee3
+# 💫 About Me:
+Working on WaffleStore<br>iOS exploiter<br>Tech Content Creator<br><br>
 
-HTML5 Developer | Flux Creator | Figma Prototype Designer
 
----
+## 🌐 Socials:
+[![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?logo=discord&logoColor=white)](https://discord.gg/https://discord.gg/tweakbreak-1443331342799601666) [![TikTok](https://img.shields.io/badge/TikTok-%23000000.svg?logo=TikTok&logoColor=white)](https://tiktok.com/@nxtcoreee3) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/Xnxtcoreee3) [![email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:help.nxtcoreee3@gmail.com) 
 
-## About
+# 💻 Tech Stack:
+![Swift](https://img.shields.io/badge/swift-F54A2A?style=flat&logo=swift&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=flat&logo=javascript&logoColor=%23F7DF1E) ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=flat&logo=firebase) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=flat&logo=figma&logoColor=white) ![Canva](https://img.shields.io/badge/Canva-%2300C4CC.svg?style=flat&logo=Canva&logoColor=white) ![Sketch](https://img.shields.io/badge/Sketch-FFB387?style=flat&logo=sketch&logoColor=black) ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=flat&logo=vercel&logoColor=white) ![Netlify](https://img.shields.io/badge/netlify-%23000000.svg?style=flat&logo=netlify&logoColor=#00C7B7)
+# 📊 GitHub Stats:
+![](https://github-readme-stats.shion.dev/api?username=nxtcoreee3&theme=dark&hide_border=false&include_all_commits=true&count_private=false)<br/>
+![](https://streak-stats.demolab.com/?user=nxtcoreee3&theme=dark&hide_border=false)<br/>
+![](https://github-readme-stats.shion.dev/api/top-langs/?username=nxtcoreee3&theme=dark&hide_border=false&include_all_commits=true&count_private=false&layout=compact)
 
-I focus on **making useful iOS apps and exploits**, as well as building **Figma prototypes.** 
+## 🏆 GitHub Trophies
+![](https://github-profile-trophy.vercel.app/?username=nxtcoreee3&theme=radical&no-frame=false&no-bg=true&margin-w=4)
 
-- Developing **HTML5 games and apps on Flux**  
-- Designing interactive **Figma prototypes** for mobile and web  
-- Experimenting with **web technologies and creative coding**  
-
----
-
-## GitHub Activity
-
-![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=nxtcoreee3&bg_color=ffffff&color=000000&line=9be9a8&point=40c463&area=true&hide_border=true)
----
-
-## Skills & Languages
-
-- **HTML, CSS, JavaScript, Python, Swift**    
-- **UI/UX prototyping with Figma**
+### 🔝 Top Contributed Repo
+![](https://github-contributor-stats.vercel.app/api?username=nxtcoreee3&limit=5&theme=dark&combine_all_yearly_contributions=true)
 
 ---
+[![](https://komarev.com/ghpvc/?username=nxtcoreee3&icon=0&color=0)](https://visitcount.itsvg.in)
 
-## Projects
+  ## 💰 You can help me by Donating
+  [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/nxtcoreee3) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/nxtcoreee3) 
 
-### Web / Flux
-- **Flux HTML5 Games & Apps** — https://nxtcoreee3.github.io/Flux/  
-- **Figma Prototypes** — interactive designs available on Tweakbreak
-
----
-
-## Socials
-
-- 📸 Instagram: https://instagram.com/nxtcoreee3  
-- 🎵 TikTok: https://tiktok.com/@nxtcoreee3  
-- 🐦 Twitter/X: https://twitter.com/Xnxtcoreee3  
-- 💬 Discord: https://discord.gg/tweakbreak-1443331342799601666  
-
----
-
-## Focus
-
-Exploiting the newly released iOS 27 with apps and restore methods.
