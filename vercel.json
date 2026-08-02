@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/Flux",
+      "destination": "https://flux-xi-bice.vercel.app"
+    },
+    {
+      "source": "/Flux/:path*",
+      "destination": "https://flux-xi-bice.vercel.app/:path*"
+    }
+  ]
+}
