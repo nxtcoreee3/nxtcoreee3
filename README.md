@@ -1,6 +1,8 @@
 # 💫 About Me:
 Working on WaffleStore<br>iOS exploiter<br>Tech Content Creator<br><br>
 
+# 👀 Profile Views:
+![](https://komarev.com/ghpvc/?username=nxtcoreee3&)
 
 ## 🌐 Socials:
 [![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?logo=discord&logoColor=white)](https://discord.gg/https://discord.gg/tweakbreak-1443331342799601666) [![TikTok](https://img.shields.io/badge/TikTok-%23000000.svg?logo=TikTok&logoColor=white)](https://tiktok.com/@nxtcoreee3) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/Xnxtcoreee3) [![email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:help.nxtcoreee3@gmail.com) 
