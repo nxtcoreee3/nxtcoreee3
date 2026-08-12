@@ -1,0 +1,109 @@
+name: Update App Source
+
+on:
+  repository_dispatch:
+    types: [app-release]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-app-source
+  cancel-in-progress: false
+
+jobs:
+  update-app-source:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out website repository
+        uses: actions/checkout@v4
+
+      - name: Update apps.json from latest releases
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const sourcePath = 'apps.json';
+            const source = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
+
+            const appDefinitions = [
+              {
+                owner: 'nxtcoreee3',
+                repo: 'Bad-Poster',
+                name: 'Bad Poster',
+                bundleID: 'com.mak5er.Pocket-Poster',
+                description: 'Custom PosterBoard wallpapers for iOS 17+ with bad_query support for iOS 26–27.0b4.',
+                iconURL: 'https://raw.githubusercontent.com/nxtcoreee3/Bad-Poster/main/Pocket%20Poster/Assets.xcassets/AppIcon.appiconset/badposter.png'
+              },
+              {
+                owner: 'nxtcoreee3',
+                repo: 'WaffleStore',
+                name: 'WaffleStore',
+                bundleID: 'com.nxtcoreee3.WaffleStore',
+                description: 'A jailed iOS app-store downgrader for iOS 16.4 and later that does not use exploits.',
+                iconURL: 'https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/Icons/apple-touch-icon.png'
+              }
+            ];
+
+            function getVersion(tagName, repoName) {
+              if (repoName === 'WaffleStore') {
+                return tagName.replace(/^WaffleStore/i, '');
+              }
+              return tagName.replace(/^v/i, '');
+            }
+
+            function getFullDate(dateString) {
+              const date = new Date(dateString);
+              const pad = value => String(value).padStart(2, '0');
+              return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}`;
+            }
+
+            const updatedApps = [];
+
+            for (const definition of appDefinitions) {
+              const releaseResponse = await github.rest.repos.getLatestRelease({
+                owner: definition.owner,
+                repo: definition.repo
+              });
+
+              const release = releaseResponse.data;
+              const ipa = release.assets.find(asset => asset.name.toLowerCase().endsWith('.ipa'));
+
+              if (!ipa) {
+                throw new Error(`No IPA asset was found in ${definition.owner}/${definition.repo}'s latest release.`);
+              }
+
+              const publishedAt = release.published_at || release.created_at;
+
+              updatedApps.push({
+                name: definition.name,
+                type: 1,
+                bundleID: definition.bundleID,
+                bundleIdentifier: definition.bundleID,
+                version: getVersion(release.tag_name, definition.repo),
+                versionDate: publishedAt.slice(0, 10),
+                fullDate: getFullDate(publishedAt),
+                size: ipa.size,
+                down: ipa.browser_download_url,
+                downloadURL: ipa.browser_download_url,
+                developerName: 'nxtcoreee3',
+                localizedDescription: definition.description,
+                iconURL: definition.iconURL
+              });
+            }
+
+            source.sourceURL = 'https://nxtcoreee3.online/apps.json';
+            source.apps = updatedApps;
+
+            fs.writeFileSync(sourcePath, JSON.stringify(source, null, 2) + '\n');
+
+      - name: Commit updated apps.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps.json
+          git diff --cached --quiet || git commit -m "Update App Source"
+          git push
