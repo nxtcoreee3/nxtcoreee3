@@ -2,19 +2,19 @@
   "name": "nxtcoreee3 IPA Source",
   "identifier": "com.nxtcoreee3.ipasource",
   "sourceURL": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/source.json",
-  "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/Icons/apple-touch-icon.png",
+  "iconURL": "https://avatars.githubusercontent.com/u/220207232?v=4",
   "website": "https://github.com/nxtcoreee3",
   "subtitle": "IPAs by nxtcoreee3",
   "META": {
     "repoName": "nxtcoreee3 IPA Source",
-    "repoIcon": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/Icons/apple-touch-icon.png"
+    "repoIcon": "https://avatars.githubusercontent.com/u/220207232?v=4"
   },
   "apps": [
     {
       "name": "Bad Poster",
       "type": 1,
       "bundleID": "com.mak5er.Pocket-Poster",
-      "bundleIdentifier": "com.mak5er.Pocket-Poster",
+      "bundleIdentifier": "com.nxtcoreee3.Bad-Poster",
       "version": "3.3.1",
       "versionDate": "2026-08-12",
       "fullDate": "20260812170824",
