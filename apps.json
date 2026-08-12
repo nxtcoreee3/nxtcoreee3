@@ -1,0 +1,44 @@
+{
+  "name": "nxtcoreee3 IPA Source",
+  "identifier": "com.nxtcoreee3.ipasource",
+  "sourceURL": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/source.json",
+  "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/Icons/apple-touch-icon.png",
+  "website": "https://github.com/nxtcoreee3",
+  "subtitle": "IPAs by nxtcoreee3",
+  "META": {
+    "repoName": "nxtcoreee3 IPA Source",
+    "repoIcon": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/Icons/apple-touch-icon.png"
+  },
+  "apps": [
+    {
+      "name": "Bad Poster",
+      "type": 1,
+      "bundleID": "com.mak5er.Pocket-Poster",
+      "bundleIdentifier": "com.mak5er.Pocket-Poster",
+      "version": "3.3.1",
+      "versionDate": "2026-08-12",
+      "fullDate": "20260812170824",
+      "size": 13813740,
+      "down": "https://github.com/nxtcoreee3/Bad-Poster/releases/download/v3.3.1/Bad-Poster.ipa",
+      "downloadURL": "https://github.com/nxtcoreee3/Bad-Poster/releases/download/v3.3.1/Bad-Poster.ipa",
+      "developerName": "nxtcoreee3",
+      "localizedDescription": "Custom PosterBoard wallpapers for iOS 17+ with bad_query support for iOS 26–27.0b4.",
+      "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/Bad-Poster/main/Pocket%20Poster/Assets.xcassets/AppIcon.appiconset/badposter.png"
+    },
+    {
+      "name": "WaffleStore",
+      "type": 1,
+      "bundleID": "com.nxtcoreee3.WaffleStore",
+      "bundleIdentifier": "com.nxtcoreee3.WaffleStore",
+      "version": "2.2.2",
+      "versionDate": "2026-07-27",
+      "fullDate": "20260727013844",
+      "size": 3051859,
+      "down": "https://github.com/nxtcoreee3/WaffleStore/releases/download/WaffleStore2.2.2/WaffleStore.ipa",
+      "downloadURL": "https://github.com/nxtcoreee3/WaffleStore/releases/download/WaffleStore2.2.2/WaffleStore.ipa",
+      "developerName": "nxtcoreee3",
+      "localizedDescription": "A jailed iOS app-store downgrader for iOS 16.4 and later that does not use exploits.",
+      "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/Icons/apple-touch-icon.png"
+    }
+  ]
+}
