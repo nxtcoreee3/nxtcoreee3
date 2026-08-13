@@ -53,7 +53,7 @@
       "downloadURL": "https://github.com/nxtcoreee3/godis/releases/download/1.0/godis.ipa",
       "developerName": "nxtcoreee3",
       "localizedDescription": "MobileGestalt editor and PosterBoard tools for iOS 27 beta devices.",
-      "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/godis/Media.xcassets/app icon.imageset/godis-icon.png"
+      "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/godis/main/godis/Media.xcassets/app%20icon.imageset/godis-icon.png"
     }
   ]
 }
