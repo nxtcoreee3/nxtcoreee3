@@ -284,6 +284,31 @@ body {
   font-weight: 600;
 }
 
+.source-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px;
+  border-top: .5px solid var(--sep);
+}
+
+.source-action {
+  display: block;
+  padding: 10px 8px;
+  border-radius: 9px;
+  background: var(--fill);
+  color: var(--label);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: background .12s, transform .1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.source-action:hover { background: rgba(120,120,128,.15); }
+.source-action:active { transform: scale(.97); }
+
 footer {
   margin-top: 44px;
   text-align: center;
@@ -554,6 +579,13 @@ footer p {
         <span class="source-url">nxtcoreee3.online/apps.json</span>
         <span class="copy-label" id="copy-source-label">Copy link</span>
       </button>
+      <div class="source-actions" aria-label="Open app source in a sideloading app">
+        <a class="source-action" href="Ksign://source/https://nxtcoreee3.online/apps.json">Open in Ksign</a>
+        <a class="source-action" href="sidestore://source?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">Open in SideStore</a>
+        <a class="source-action" href="altstore://source?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">Open in AltStore</a>
+        <a class="source-action" href="esign://addsource?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">Open in ESign</a>
+        <a class="source-action" href="https://nxtcoreee3.online/apps.json">Open source URL</a>
+      </div>
     </div>
   </div>
 
