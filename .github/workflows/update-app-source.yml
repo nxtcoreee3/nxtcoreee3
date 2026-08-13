@@ -49,10 +49,10 @@ jobs:
               {
                 owner: 'nxtcoreee3',
                 repo: 'godis',
-                name: 'Godis',
+                name: 'godis',
                 bundleID: 'com.nxtcoreee3.godis',
                 description: 'MobileGestalt editor and PosterBoard tools for iOS 27 beta devices.',
-                iconURL: 'https://raw.githubusercontent.com/nxtcoreee3/godis/Media.xcassets/app icon.imageset/godis-icon.png'
+                iconURL: 'https://raw.githubusercontent.com/nxtcoreee3/godis/main/godis/Media.xcassets/app%20icon.imageset/godis-icon.png'
               }
             ];
 
