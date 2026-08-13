@@ -1,20 +1,20 @@
 {
-  "name": "nxtcoreee3 IPA Source",
+  "name": "nxtcoreee3s IPA Source",
   "identifier": "com.nxtcoreee3.ipasource",
   "sourceURL": "https://nxtcoreee3.online/apps.json",
   "iconURL": "https://avatars.githubusercontent.com/u/220207232?v=4",
   "website": "https://github.com/nxtcoreee3",
   "subtitle": "IPAs by nxtcoreee3",
   "META": {
-    "repoName": "nxtcoreee3 IPA Source",
+    "repoName": "nxtcoreee3s IPA Source",
     "repoIcon": "https://avatars.githubusercontent.com/u/220207232?v=4"
   },
   "apps": [
     {
       "name": "Bad Poster",
       "type": 1,
-      "bundleID": "com.mak5er.Pocket-Poster",
-      "bundleIdentifier": "com.mak5er.Pocket-Poster",
+      "bundleID": "com.nxtcoreee3.Bad-Poster",
+      "bundleIdentifier": "com.nxtcoreee3.Bad-Poster",
       "version": "3.3.1",
       "versionDate": "2026-08-12",
       "fullDate": "20260812170824",
@@ -39,6 +39,21 @@
       "developerName": "nxtcoreee3",
       "localizedDescription": "A jailed iOS app-store downgrader for iOS 16.4 and later that does not use exploits.",
       "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/WaffleStore/main/Icons/apple-touch-icon.png"
+    },
+    {
+      "name": "Godis",
+      "type": 1,
+      "bundleID": "com.nxtcoreee3.godis",
+      "bundleIdentifier": "com.nxtcoreee3.godis",
+      "version": "1.0",
+      "versionDate": "2026-08-13",
+      "fullDate": "20260813163823",
+      "size": 14899374,
+      "down": "https://github.com/nxtcoreee3/godis/releases/download/1.0/godis.ipa",
+      "downloadURL": "https://github.com/nxtcoreee3/godis/releases/download/1.0/godis.ipa",
+      "developerName": "nxtcoreee3",
+      "localizedDescription": "MobileGestalt editor and PosterBoard tools for iOS 27 beta devices.",
+      "iconURL": "https://raw.githubusercontent.com/nxtcoreee3/godis/main/icon.icon/Assets/some%20icon%20thing.png"
     }
   ]
 }
