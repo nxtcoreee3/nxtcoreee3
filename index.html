@@ -248,6 +248,42 @@ body {
 .chev svg { display: block; }
 	  
 
+.app-source-copy {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--label);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 1px rgba(0,0,0,0.04);
+  -webkit-tap-highlight-color: transparent;
+  transition: background .12s, transform .1s ease;
+}
+
+.app-source-copy:hover { background: #f7f7f7; }
+.app-source-copy:active { background: #efefef; transform: scale(.99); }
+.app-source-copy .source-url {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--label-2);
+}
+.app-source-copy .copy-label {
+  flex-shrink: 0;
+  color: var(--label-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 footer {
   margin-top: 44px;
   text-align: center;
@@ -512,6 +548,16 @@ footer p {
   </div>
 
   <div class="group">
+    <p class="group-label">App Source</p>
+    <div class="card">
+      <button class="app-source-copy" type="button" onclick="copyAppSource()" aria-label="Copy app source link">
+        <span class="source-url">nxtcoreee3.online/apps.json</span>
+        <span class="copy-label" id="copy-source-label">Copy link</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="group">
     <p class="group-label">Community</p>
     <div class="card">
 
@@ -601,6 +647,30 @@ footer p {
       setTimeout(() => {
         popup.style.display = 'none';
       }, 300);
+    }
+
+    async function copyAppSource() {
+      const url = 'https://nxtcoreee3.online/apps.json';
+      const label = document.getElementById('copy-source-label');
+
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch (error) {
+        const input = document.createElement('textarea');
+        input.value = url;
+        input.setAttribute('readonly', '');
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        input.remove();
+      }
+
+      label.textContent = 'Copied!';
+      setTimeout(() => {
+        label.textContent = 'Copy link';
+      }, 1600);
     }
   </script>
 </body>
