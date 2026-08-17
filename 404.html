@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#caa06b">
+  <title>404 — wrong aisle</title>
+  <style>
+    :root { --cardboard:#caa06b; --ink:#21170f; --muted:#62472f; --red:#a63c25; --blue:#244f59; --yellow:#dfad3e; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { min-height:100%; background:var(--cardboard); }
+    body { min-height:100dvh; display:grid; place-items:center; overflow-x:hidden; padding:14px; color:var(--ink); background:var(--cardboard) url("app%20icons/package/cardboard-texture.avif") center top / 740px auto repeat; font-family:Arial,Helvetica,sans-serif; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.08; background:repeating-linear-gradient(0deg, transparent 0 5px, rgba(33,23,15,.08) 5px 6px); }
+    .wrap { width:min(100%,560px); }
+    .pack { position:relative; overflow:hidden; padding:17px; border:2px solid var(--ink); background:rgba(211,173,117,.76); box-shadow:6px 7px 0 var(--ink); }
+    .pack::before { content:""; position:absolute; inset:9px; border:1px solid rgba(33,23,15,.45); pointer-events:none; }
+    .content { position:relative; z-index:1; }
+    .top { display:flex; justify-content:space-between; gap:15px; padding:3px 3px 13px; border-bottom:2px solid var(--ink); font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .brand { display:flex; align-items:center; gap:8px; color:inherit; text-decoration:none; }
+    .brand-mark { width:29px; height:29px; overflow:hidden; border:2px solid var(--ink); border-radius:50%; background:var(--cardboard); }
+    .brand-mark img { width:100%; height:100%; display:block; object-fit:cover; }
+    .top-note { color:var(--red); text-align:right; }
+    .error { padding:42px 8px 36px; text-align:center; }
+    .kicker { color:var(--red); font-size:11px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+    .code { margin-top:4px; font-size:clamp(82px,24vw,148px); line-height:.8; font-weight:900; letter-spacing:-.11em; }
+    h1 { margin-top:22px; font-size:clamp(25px,7vw,38px); line-height:.95; letter-spacing:-.07em; text-transform:uppercase; }
+    .copy { max-width:365px; margin:10px auto 0; color:var(--muted); font-size:13px; line-height:1.45; }
+    .label { display:inline-block; margin-top:19px; padding:7px 9px; border:2px solid var(--red); color:var(--red); font-size:10px; font-weight:900; letter-spacing:.09em; text-transform:uppercase; transform:rotate(-3deg); }
+    .rule { height:8px; margin:0 3px 13px; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background:repeating-linear-gradient(135deg, transparent 0 5px, var(--ink) 5px 7px); }
+    .actions { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; }
+    .action { min-height:48px; display:grid; place-items:center; border:1px solid var(--ink); color:var(--ink); background:rgba(255,255,255,.18); text-decoration:none; font-size:11px; font-weight:900; text-transform:uppercase; }
+    .action.primary { background:var(--yellow); }
+    .action:hover, .action:focus-visible { color:var(--cardboard); background:var(--blue); }
+    footer { display:flex; justify-content:space-between; gap:10px; margin-top:17px; padding:10px 2px 0; border-top:1px solid var(--ink); color:var(--muted); font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    footer a { color:var(--blue); }
+    :focus-visible { outline:3px solid var(--red); outline-offset:3px; }
+    @media (max-width:520px) { .pack { padding:12px; box-shadow:4px 5px 0 var(--ink); } .pack::before { inset:6px; } .top { font-size:9px; } .top-note { max-width:135px; } .error { padding:38px 4px 31px; } .code { font-size:100px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="pack">
+      <div class="content">
+        <header class="top">
+          <a class="brand" href="/"><span class="brand-mark"><img src="app%20icons/nxtcoreee3-icon-app.png" alt=""></span><span>nxtcoreee3 / internet goods</span></a>
+          <span class="top-note">quality control<br>notice</span>
+        </header>
+        <section class="error" aria-labelledby="error-title">
+          <p class="kicker">wrong aisle</p>
+          <div class="code" aria-hidden="true">404</div>
+          <h1 id="error-title">This page is out of stock.</h1>
+          <p class="copy">The thing you were looking for probably moved, never existed, or got lost somewhere between the idea and the deploy.</p>
+          <span class="label">please try another link</span>
+        </section>
+        <div class="rule"></div>
+        <nav class="actions" aria-label="404 navigation">
+          <a class="action primary" href="/">Back to the front</a>
+          <a class="action" href="/#top">Open the box</a>
+        </nav>
+        <footer><span>nxtcoreee3 / 404</span><a href="mailto:help.nxtcoreee3@gmail.com">email ↗</a></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
