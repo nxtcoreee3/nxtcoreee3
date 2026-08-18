@@ -1,5 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/Respring",
+      "destination": "/Respring/respring.html",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/Flux",
