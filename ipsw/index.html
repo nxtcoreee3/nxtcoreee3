@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Check which iOS firmware versions Apple is currently signing for your iPhone.">
+  <meta name="description" content="Check which firmware versions Apple is currently signing for your Apple device.">
   <meta name="theme-color" content="#caa06b">
-  <title>iOS signing check — nxtcoreee3</title>
+  <title>Firmware signing check — nxtcoreee3</title>
   <style>
     /* Style reminder: Apple Service Console—calm, precise signing data in the existing cardboard-package visual language. */
     :root { --paper:#caa06b; --paper-deep:#b6854e; --ink:#21170f; --muted:#62472f; --red:#a63c25; --blue:#244f59; --yellow:#dfad3e; --green:#267b58; --line:rgba(33,23,15,.78); --shadow:rgba(33,23,15,.24); }
@@ -81,19 +81,19 @@
       </header>
       <main class="lookup">
         <p class="eyebrow">fresh status / live check</p>
-        <h1>iOS signing<br>check</h1>
-        <p class="intro">Choose an iPhone and see the IPSW versions Apple is currently signing for it. Signing windows can close without notice, so use this as a live reference.</p>
+        <h1>Firmware signing<br>check</h1>
+        <p class="intro">Choose an Apple device and see the firmware versions Apple is currently signing for it. Signing windows can close without notice, so use this as a live reference.</p>
         <p class="status-tape"><span class="signal" aria-hidden="true"></span>Live signing status from IPSW Downloads</p>
         <form class="search-card" id="device-form" novalidate>
-          <label class="field-label" for="device-input">Your iPhone</label>
-          <div class="search-row"><input class="device-input" id="device-input" name="device" list="device-options" type="search" autocomplete="off" placeholder="e.g. iPhone 15 or iPhone15,4" aria-describedby="device-help"><button class="lookup-button" id="lookup-button" type="submit">Check signed iOS</button></div>
+          <label class="field-label" for="device-input">Your Apple device</label>
+          <div class="search-row"><input class="device-input" id="device-input" name="device" list="device-options" type="search" autocomplete="off" placeholder="e.g. iPad Pro or Watch7,1" aria-describedby="device-help"><button class="lookup-button" id="lookup-button" type="submit">Check signing status</button></div>
           <datalist id="device-options"></datalist>
-          <p class="helper" id="device-help">Start typing a model name, then choose the suggestion. You can also enter a hardware identifier such as <code>iPhone15,4</code>.</p>
+          <p class="helper" id="device-help">Start typing a device name, then choose the suggestion. iPhone, iPad, Apple Watch, Apple TV, iPod touch, Mac, and other entries supplied by IPSW Downloads are included. You can also enter an identifier such as <code>iPad14,3</code>.</p>
         </form>
-        <p class="lookup-message" id="lookup-message" role="status" aria-live="polite">Loading iPhone models…</p>
+        <p class="lookup-message" id="lookup-message" role="status" aria-live="polite">Loading Apple device models…</p>
         <section class="results" id="results" aria-live="polite" aria-labelledby="results-title"></section>
       </main>
-      <section class="faq" aria-label="About the signing check"><h2>What “signed” means</h2><p>A signed IPSW is a firmware version Apple currently allows to be restored for the selected device. This tool lists only the signed releases returned by IPSW Downloads; it does not guarantee that a restore is appropriate for your device or situation.</p></section>
+      <section class="faq" aria-label="About the signing check"><h2>What “signed” means</h2><p>A signed firmware release is one Apple currently allows to be restored or installed for the selected device. This tool lists only the signed releases returned by IPSW Downloads; it does not guarantee that an update or restore is appropriate for your device or situation.</p></section>
       <footer><span>nxtcoreee3 / iOS utility</span><a href="https://ipsw.me/" target="_blank" rel="noopener noreferrer">data: IPSW Downloads ↗</a></footer>
     </div>
   </div>
@@ -112,12 +112,12 @@
     function formatDate(value){if(!value)return 'Release date unavailable';const date=new Date(value);return Number.isNaN(date.getTime())?'Release date unavailable':date.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}
     function setMessage(text,status=''){message.textContent=text;message.dataset.status=status;}
     function resolveDevice(value){const query=value.trim().toLowerCase();if(!query)return null;const exact=devices.find(device=>device.identifier.toLowerCase()===query||device.name.toLowerCase()===query);if(exact)return exact;const matches=devices.filter(device=>device.name.toLowerCase().includes(query)||device.identifier.toLowerCase().includes(query));return matches.length===1?matches[0]:null;}
-    function renderResults(device,data){const signed=(data.firmwares||[]).filter(firmware=>firmware.signed===true);const rows=signed.length?signed.map(firmware=>`<li class="firmware-row"><span class="firmware-dot" aria-hidden="true"></span><div><p class="firmware-version">iOS ${escapeHtml(firmware.version||'unknown')}</p><p class="firmware-meta">build ${escapeHtml(firmware.buildid||'unavailable')}</p><p class="firmware-date">Released ${escapeHtml(formatDate(firmware.releasedate))}</p></div>${firmware.url?`<a class="download" href="${escapeHtml(firmware.url)}" target="_blank" rel="noopener noreferrer">Apple IPSW ↗</a>`:''}</li>`).join(''):`<p class="empty-results">IPSW Downloads currently reports no signed IPSW releases for this device.</p>`;
+    function renderResults(device,data){const signed=(data.firmwares||[]).filter(firmware=>firmware.signed===true);const rows=signed.length?signed.map(firmware=>`<li class="firmware-row"><span class="firmware-dot" aria-hidden="true"></span><div><p class="firmware-version">Version ${escapeHtml(firmware.version||'unknown')}</p><p class="firmware-meta">build ${escapeHtml(firmware.buildid||'unavailable')}</p><p class="firmware-date">Released ${escapeHtml(formatDate(firmware.releasedate))}</p></div>${firmware.url?`<a class="download" href="${escapeHtml(firmware.url)}" target="_blank" rel="noopener noreferrer">Apple firmware ↗</a>`:''}</li>`).join(''):`<p class="empty-results">IPSW Downloads currently reports no signed firmware releases for this device.</p>`;
       results.innerHTML=`<div class="results-head"><div><p class="results-overline">signed releases for</p><h2 class="results-title" id="results-title">${escapeHtml(data.name||device.name)}</h2></div><span class="count">${signed.length} signed</span></div><ul class="firmware-list">${rows}</ul><p class="api-credit">Status refreshes only when you search. Firmware metadata is supplied by <a href="https://ipsw.me/" target="_blank" rel="noopener noreferrer">IPSW Downloads ↗</a>.</p>`;
       results.classList.add('is-visible');
     }
-    async function loadDevices(){try{const response=await fetch(`${API_BASE}/devices`);if(!response.ok)throw new Error('Unable to load device list');const allDevices=await response.json();devices=allDevices.filter(device=>/^iPhone/i.test(device.name)||/^iPhone/i.test(device.identifier));devices.forEach(device=>{const option=document.createElement('option');option.value=device.name;option.label=device.identifier;list.appendChild(option);});setMessage('Choose your iPhone, then check the currently signed versions.');const requested=new URLSearchParams(window.location.search).get('device');if(requested){input.value=requested;await lookup(requested);}}catch(error){setMessage('The model list could not load. Enter an identifier such as iPhone15,4 and try again.','error');}}
-    async function lookup(value){const device=resolveDevice(value)||{identifier:value.trim(),name:value.trim()};if(!device.identifier){setMessage('Enter an iPhone model or hardware identifier first.','error');input.focus();return;}button.disabled=true;button.textContent='Checking…';results.classList.remove('is-visible');setMessage(`Checking the signing status for ${device.name}…`);try{const response=await fetch(`${API_BASE}/ipsw/device/${encodeURIComponent(device.identifier)}`);if(!response.ok)throw new Error('Device lookup unavailable');const data=await response.json();renderResults(device,data);setMessage(`Current signing status loaded for ${data.name||device.name}.`);const url=new URL(window.location.href);url.searchParams.set('device',device.identifier);window.history.replaceState({},'',url);}catch(error){setMessage('No result was returned. Choose a suggestion or check the device identifier and try again.','error');}finally{button.disabled=false;button.textContent='Check signed iOS';}}
+    async function loadDevices(){try{const response=await fetch(`${API_BASE}/devices`);if(!response.ok)throw new Error('Unable to load device list');devices=await response.json();devices.sort((first,second)=>first.name.localeCompare(second.name)).forEach(device=>{const option=document.createElement('option');option.value=device.name;option.label=device.identifier;list.appendChild(option);});setMessage('Choose an Apple device, then check the currently signed firmware.');const requested=new URLSearchParams(window.location.search).get('device');if(requested){input.value=requested;await lookup(requested);}}catch(error){setMessage('The model list could not load. Enter a hardware identifier such as iPad14,3 and try again.','error');}}
+    async function lookup(value){const device=resolveDevice(value)||{identifier:value.trim(),name:value.trim()};if(!device.identifier){setMessage('Enter an Apple device model or hardware identifier first.','error');input.focus();return;}button.disabled=true;button.textContent='Checking…';results.classList.remove('is-visible');setMessage(`Checking the signing status for ${device.name}…`);try{const response=await fetch(`${API_BASE}/ipsw/device/${encodeURIComponent(device.identifier)}`);if(!response.ok)throw new Error('Device lookup unavailable');const data=await response.json();renderResults(device,data);setMessage(`Current signing status loaded for ${data.name||device.name}.`);const url=new URL(window.location.href);url.searchParams.set('device',device.identifier);window.history.replaceState({},'',url);}catch(error){setMessage('No result was returned. Choose a suggestion or check the device identifier and try again.','error');}finally{button.disabled=false;button.textContent='Check signing status';}}
     form.addEventListener('submit',event=>{event.preventDefault();lookup(input.value);});
     loadDevices();
   </script>

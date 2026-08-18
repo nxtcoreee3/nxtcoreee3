@@ -188,8 +188,8 @@
         <div class="elsewhere"><a class="mini-link" href="https://discord.gg/Jmpzp36PfX" target="_blank" rel="noopener noreferrer">Discord <span>Join ↗</span></a><a class="mini-link" href="https://ko-fi.com/nxtcoreee3" target="_blank" rel="noopener noreferrer">Ko-fi <span>Support ↗</span></a></div>
 
         <section class="ipsw-mini" aria-labelledby="ipsw-mini-heading">
-          <div class="ipsw-mini-top"><div><p class="section-kicker">fresh status</p><h2 id="ipsw-mini-heading">iOS signing check</h2><p>Enter an iPhone model or identifier to see the iOS versions Apple is signing right now.</p></div><span class="signal-seal" aria-hidden="true">✓</span></div>
-          <form class="ipsw-form" action="/ipsw/" method="get" id="ipsw-footer-form"><input class="ipsw-input" id="ipsw-footer-device" name="device" list="ipsw-device-options" type="search" autocomplete="off" placeholder="e.g. iPhone 15 or iPhone15,4" aria-label="Your iPhone model"><button class="ipsw-submit" type="submit">Check versions ↗</button></form>
+          <div class="ipsw-mini-top"><div><p class="section-kicker">fresh status</p><h2 id="ipsw-mini-heading">Firmware signing check</h2><p>Enter any Apple device model or identifier to see the firmware versions Apple is signing right now.</p></div><span class="signal-seal" aria-hidden="true">✓</span></div>
+          <form class="ipsw-form" action="/ipsw/" method="get" id="ipsw-footer-form"><input class="ipsw-input" id="ipsw-footer-device" name="device" list="ipsw-device-options" type="search" autocomplete="off" placeholder="e.g. iPad Pro or Watch7,1" aria-label="Your Apple device"><button class="ipsw-submit" type="submit">Check versions ↗</button></form>
           <datalist id="ipsw-device-options"></datalist>
           <p class="ipsw-form-note">Live data via <a href="https://ipsw.me/" target="_blank" rel="noopener noreferrer">IPSW Downloads ↗</a>. Not sure which model? The full checker can help.</p>
         </section>
@@ -216,7 +216,7 @@
         const response=await fetch('https://api.ipsw.me/v4/devices');
         if(!response.ok) throw new Error('Device list unavailable');
         const devices=await response.json();
-        devices.filter(device=>/^iPhone/i.test(device.name)||/^iPhone/i.test(device.identifier)).forEach(device=>{
+        devices.sort((first,second)=>first.name.localeCompare(second.name)).forEach(device=>{
           const option=document.createElement('option');
           option.value=device.name;
           option.label=device.identifier;
