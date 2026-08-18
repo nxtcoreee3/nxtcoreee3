@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Check which iOS firmware versions Apple is currently signing for your iPhone.">
+  <meta name="theme-color" content="#caa06b">
+  <title>iOS signing check — nxtcoreee3</title>
+  <style>
+    /* Style reminder: Apple Service Console—calm, precise signing data in the existing cardboard-package visual language. */
+    :root { --paper:#caa06b; --paper-deep:#b6854e; --ink:#21170f; --muted:#62472f; --red:#a63c25; --blue:#244f59; --yellow:#dfad3e; --green:#267b58; --line:rgba(33,23,15,.78); --shadow:rgba(33,23,15,.24); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { min-height:100%; background:var(--paper); }
+    body { min-height:100dvh; overflow-x:hidden; color:var(--ink); background:#b88750 url("../app%20icons/package/cardboard-texture.avif") center top / 740px auto repeat; font-family:Arial,Helvetica,sans-serif; -webkit-font-smoothing:antialiased; }
+    body::before { content:""; position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.08; background-image:repeating-linear-gradient(0deg,transparent 0 5px,rgba(33,23,15,.08) 5px 6px); background-size:100% 6px; mix-blend-mode:multiply; }
+    body::after { content:""; position:fixed; z-index:-1; pointer-events:none; width:280px; height:280px; right:-155px; top:32px; border:3px solid rgba(36,79,89,.22); border-radius:50%; box-shadow:0 0 0 16px rgba(36,79,89,.08),0 0 0 31px rgba(166,60,37,.08); }
+    a { color:inherit; }
+    button,input { font:inherit; }
+    .wrap { width:min(100% - 24px,760px); margin:0 auto; padding:16px 0 32px; }
+    .pack { position:relative; overflow:hidden; padding:17px; border:2px solid var(--ink); background:rgba(211,173,117,.76); box-shadow:6px 7px 0 var(--ink); }
+    .pack::before { content:""; position:absolute; inset:9px; border:1px solid rgba(23,23,20,.42); pointer-events:none; }
+    .top,.lookup,.faq,footer { position:relative; z-index:1; }
+    .top { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:3px 3px 13px; border-bottom:2px solid var(--ink); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .brand { display:flex; align-items:center; gap:8px; text-decoration:none; }
+    .brand-mark { width:29px; height:29px; overflow:hidden; border:2px solid var(--ink); border-radius:50%; background:var(--paper); }
+    .brand-mark img { width:100%; height:100%; display:block; object-fit:cover; }
+    .back { color:var(--blue); font-size:10px; font-weight:800; text-decoration-thickness:1px; text-underline-offset:3px; }
+    .lookup { padding:25px 3px 4px; }
+    .eyebrow { color:var(--red); font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { max-width:610px; margin-top:4px; font-size:clamp(35px,8vw,61px); line-height:.88; letter-spacing:-.075em; text-transform:uppercase; }
+    .intro { max-width:535px; margin-top:11px; color:var(--muted); font-size:13px; line-height:1.45; }
+    .status-tape { display:flex; align-items:center; gap:8px; margin:17px 0 0; padding:7px 9px; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background:repeating-linear-gradient(135deg,transparent 0 5px,rgba(33,23,15,.18) 5px 7px); color:#403322; font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .signal { width:10px; height:10px; flex:none; border:2px solid var(--ink); border-radius:50%; background:var(--green); }
+    .search-card { margin-top:14px; padding:13px; border:2px solid var(--ink); background:#f7f4e9; box-shadow:4px 4px 0 rgba(33,23,15,.22); }
+    .field-label { display:block; font-size:10px; font-weight:900; letter-spacing:.09em; text-transform:uppercase; }
+    .search-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; margin-top:7px; }
+    .device-input { min-width:0; height:44px; padding:0 11px; border:2px solid var(--ink); border-radius:0; background:#fffdf4; color:var(--ink); font-weight:700; outline:none; }
+    .device-input::placeholder { color:#8e7d68; }
+    .device-input:focus { box-shadow:3px 3px 0 var(--red); }
+    .lookup-button { min-height:44px; padding:0 14px; border:2px solid var(--ink); background:var(--blue); color:var(--paper); cursor:pointer; font-size:10px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
+    .lookup-button:hover,.lookup-button:focus-visible { background:var(--ink); color:var(--yellow); }
+    .helper { margin-top:8px; color:var(--muted); font-size:10px; line-height:1.35; }
+    .helper code { padding:1px 3px; background:#e6dfce; color:var(--ink); font-family:monospace; font-size:.95em; }
+    .lookup-message { min-height:18px; margin-top:11px; color:var(--muted); font-size:11px; font-weight:700; }
+    .lookup-message[data-status="error"] { color:var(--red); }
+    .results { display:none; margin-top:14px; border:2px solid var(--ink); background:rgba(255,253,244,.93); }
+    .results.is-visible { display:block; }
+    .results-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:12px; border-bottom:2px solid var(--ink); background:var(--yellow); }
+    .results-overline { font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .results-title { margin-top:2px; font-size:21px; line-height:1; font-weight:900; letter-spacing:-.045em; text-transform:uppercase; }
+    .count { flex:none; padding:4px 6px; border:1px solid var(--ink); background:#f7f4e9; font-size:9px; font-weight:900; text-transform:uppercase; }
+    .firmware-list { list-style:none; }
+    .firmware-row { display:grid; grid-template-columns:10px minmax(0,1fr) auto; gap:9px; align-items:center; padding:11px 12px; border-bottom:1px solid rgba(33,23,15,.4); }
+    .firmware-row:last-child { border-bottom:0; }
+    .firmware-dot { width:10px; height:10px; border:2px solid var(--ink); border-radius:50%; background:var(--green); }
+    .firmware-version { font-size:15px; font-weight:900; letter-spacing:-.025em; }
+    .firmware-meta { margin-top:2px; color:var(--muted); font-family:monospace; font-size:10px; }
+    .firmware-date { margin-top:2px; color:var(--muted); font-size:9px; }
+    .download { display:inline-flex; align-items:center; min-height:30px; padding:0 8px; border:1px solid var(--ink); background:var(--blue); color:var(--paper); font-size:9px; font-weight:900; text-decoration:none; text-transform:uppercase; }
+    .download:hover,.download:focus-visible { background:var(--ink); color:var(--yellow); }
+    .empty-results { padding:18px 12px; color:var(--muted); font-size:12px; line-height:1.4; }
+    .api-credit { padding:9px 12px; border-top:1px solid rgba(33,23,15,.4); color:var(--muted); font-size:9px; line-height:1.35; }
+    .api-credit a { color:var(--blue); font-weight:800; }
+    .faq { margin:18px 3px 0; padding-top:12px; border-top:2px solid var(--ink); }
+    .faq h2 { font-size:13px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
+    .faq p { max-width:580px; margin-top:5px; color:var(--muted); font-size:10px; line-height:1.4; }
+    footer { display:flex; justify-content:space-between; gap:10px; margin-top:18px; padding:10px 2px 0; border-top:2px solid var(--ink); color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    footer a { color:var(--blue); }
+    :focus-visible { outline:3px solid var(--red); outline-offset:3px; }
+    @media(max-width:520px){ .wrap { width:min(100% - 16px,760px); padding:8px 0 22px; } .pack { padding:12px; box-shadow:4px 5px 0 var(--ink); } .pack::before { inset:6px; } .top { font-size:9px; } .lookup { padding:19px 2px 2px; } h1 { font-size:36px; } .intro { font-size:12px; } .search-card { padding:11px; } .search-row { grid-template-columns:1fr; } .lookup-button { min-height:42px; } .firmware-row { grid-template-columns:10px minmax(0,1fr); } .download { grid-column:2; justify-self:start; margin-top:2px; } .results-head { padding:10px; } }
+    @media(prefers-reduced-motion:no-preference){ .results.is-visible .firmware-row { animation:row-in .22s cubic-bezier(.23,1,.32,1) both; } .results.is-visible .firmware-row:nth-child(2){animation-delay:.04s}.results.is-visible .firmware-row:nth-child(3){animation-delay:.08s}.lookup-button,.download{transition:transform .14s cubic-bezier(.23,1,.32,1),background-color .14s cubic-bezier(.23,1,.32,1),color .14s cubic-bezier(.23,1,.32,1)}.lookup-button:active,.download:active{transform:scale(.97)}@keyframes row-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}} }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="pack">
+      <header class="top">
+        <a class="brand" href="/" aria-label="nxtcoreee3 home"><span class="brand-mark"><img src="../app%20icons/nxtcoreee3-icon-app.png" alt=""></span><span>nxtcoreee3</span></a>
+        <a class="back" href="/">← back to box</a>
+      </header>
+      <main class="lookup">
+        <p class="eyebrow">fresh status / live check</p>
+        <h1>iOS signing<br>check</h1>
+        <p class="intro">Choose an iPhone and see the IPSW versions Apple is currently signing for it. Signing windows can close without notice, so use this as a live reference.</p>
+        <p class="status-tape"><span class="signal" aria-hidden="true"></span>Live signing status from IPSW Downloads</p>
+        <form class="search-card" id="device-form" novalidate>
+          <label class="field-label" for="device-input">Your iPhone</label>
+          <div class="search-row"><input class="device-input" id="device-input" name="device" list="device-options" type="search" autocomplete="off" placeholder="e.g. iPhone 15 or iPhone15,4" aria-describedby="device-help"><button class="lookup-button" id="lookup-button" type="submit">Check signed iOS</button></div>
+          <datalist id="device-options"></datalist>
+          <p class="helper" id="device-help">Start typing a model name, then choose the suggestion. You can also enter a hardware identifier such as <code>iPhone15,4</code>.</p>
+        </form>
+        <p class="lookup-message" id="lookup-message" role="status" aria-live="polite">Loading iPhone models…</p>
+        <section class="results" id="results" aria-live="polite" aria-labelledby="results-title"></section>
+      </main>
+      <section class="faq" aria-label="About the signing check"><h2>What “signed” means</h2><p>A signed IPSW is a firmware version Apple currently allows to be restored for the selected device. This tool lists only the signed releases returned by IPSW Downloads; it does not guarantee that a restore is appropriate for your device or situation.</p></section>
+      <footer><span>nxtcoreee3 / iOS utility</span><a href="https://ipsw.me/" target="_blank" rel="noopener noreferrer">data: IPSW Downloads ↗</a></footer>
+    </div>
+  </div>
+  <script>
+    /* Style reminder: searches are explicit, results are factual, and the interface never invents signing data. */
+    const API_BASE='https://api.ipsw.me/v4';
+    const form=document.getElementById('device-form');
+    const input=document.getElementById('device-input');
+    const list=document.getElementById('device-options');
+    const button=document.getElementById('lookup-button');
+    const message=document.getElementById('lookup-message');
+    const results=document.getElementById('results');
+    let devices=[];
+
+    function escapeHtml(value){return String(value).replace(/[&<>'"]/g,character=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));}
+    function formatDate(value){if(!value)return 'Release date unavailable';const date=new Date(value);return Number.isNaN(date.getTime())?'Release date unavailable':date.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}
+    function setMessage(text,status=''){message.textContent=text;message.dataset.status=status;}
+    function resolveDevice(value){const query=value.trim().toLowerCase();if(!query)return null;const exact=devices.find(device=>device.identifier.toLowerCase()===query||device.name.toLowerCase()===query);if(exact)return exact;const matches=devices.filter(device=>device.name.toLowerCase().includes(query)||device.identifier.toLowerCase().includes(query));return matches.length===1?matches[0]:null;}
+    function renderResults(device,data){const signed=(data.firmwares||[]).filter(firmware=>firmware.signed===true);const rows=signed.length?signed.map(firmware=>`<li class="firmware-row"><span class="firmware-dot" aria-hidden="true"></span><div><p class="firmware-version">iOS ${escapeHtml(firmware.version||'unknown')}</p><p class="firmware-meta">build ${escapeHtml(firmware.buildid||'unavailable')}</p><p class="firmware-date">Released ${escapeHtml(formatDate(firmware.releasedate))}</p></div>${firmware.url?`<a class="download" href="${escapeHtml(firmware.url)}" target="_blank" rel="noopener noreferrer">Apple IPSW ↗</a>`:''}</li>`).join(''):`<p class="empty-results">IPSW Downloads currently reports no signed IPSW releases for this device.</p>`;
+      results.innerHTML=`<div class="results-head"><div><p class="results-overline">signed releases for</p><h2 class="results-title" id="results-title">${escapeHtml(data.name||device.name)}</h2></div><span class="count">${signed.length} signed</span></div><ul class="firmware-list">${rows}</ul><p class="api-credit">Status refreshes only when you search. Firmware metadata is supplied by <a href="https://ipsw.me/" target="_blank" rel="noopener noreferrer">IPSW Downloads ↗</a>.</p>`;
+      results.classList.add('is-visible');
+    }
+    async function loadDevices(){try{const response=await fetch(`${API_BASE}/devices`);if(!response.ok)throw new Error('Unable to load device list');const allDevices=await response.json();devices=allDevices.filter(device=>/^iPhone/i.test(device.name)||/^iPhone/i.test(device.identifier));devices.forEach(device=>{const option=document.createElement('option');option.value=device.name;option.label=device.identifier;list.appendChild(option);});setMessage('Choose your iPhone, then check the currently signed versions.');const requested=new URLSearchParams(window.location.search).get('device');if(requested){input.value=requested;await lookup(requested);}}catch(error){setMessage('The model list could not load. Enter an identifier such as iPhone15,4 and try again.','error');}}
+    async function lookup(value){const device=resolveDevice(value)||{identifier:value.trim(),name:value.trim()};if(!device.identifier){setMessage('Enter an iPhone model or hardware identifier first.','error');input.focus();return;}button.disabled=true;button.textContent='Checking…';results.classList.remove('is-visible');setMessage(`Checking the signing status for ${device.name}…`);try{const response=await fetch(`${API_BASE}/ipsw/device/${encodeURIComponent(device.identifier)}`);if(!response.ok)throw new Error('Device lookup unavailable');const data=await response.json();renderResults(device,data);setMessage(`Current signing status loaded for ${data.name||device.name}.`);const url=new URL(window.location.href);url.searchParams.set('device',device.identifier);window.history.replaceState({},'',url);}catch(error){setMessage('No result was returned. Choose a suggestion or check the device identifier and try again.','error');}finally{button.disabled=false;button.textContent='Check signed iOS';}}
+    form.addEventListener('submit',event=>{event.preventDefault();lookup(input.value);});
+    loadDevices();
+  </script>
+</body>
+</html>

@@ -9,6 +9,7 @@
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   <script defer src="speed-insights.js"></script>
   <style>
+    /* Style reminder: Apple Service Console—precise, calm utility embedded in the existing cardboard-package identity. */
     :root {
       --paper:#caa06b;
       --paper-deep:#b6854e;
@@ -91,6 +92,19 @@
     .qr-link { display:block; flex:none; padding:4px; border:2px solid var(--ink); background:white; }
     .qr { display:block; width:68px; height:68px; image-rendering:pixelated; }
     .qr-copy { color:var(--muted); font-size:9px; line-height:1.3; }
+    .ipsw-mini { margin-top:17px; padding:13px; border:2px solid var(--ink); background:rgba(247,244,233,.82); color:var(--ink); }
+    .ipsw-mini-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .ipsw-mini h2 { margin-top:3px; font-size:21px; line-height:.95; letter-spacing:-.05em; text-transform:uppercase; }
+    .ipsw-mini p { max-width:440px; margin-top:5px; color:var(--muted); font-size:11px; line-height:1.35; }
+    .signal-seal { flex:none; display:grid; place-items:center; width:38px; height:38px; border:2px solid var(--ink); border-radius:50%; background:var(--yellow); color:var(--ink); font-size:19px; font-weight:900; }
+    .ipsw-form { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; margin-top:11px; }
+    .ipsw-input { min-width:0; height:39px; padding:0 10px; border:2px solid var(--ink); border-radius:0; background:#fffdf4; color:var(--ink); font:700 11px Arial, Helvetica, sans-serif; outline:none; }
+    .ipsw-input::placeholder { color:#8e7d68; }
+    .ipsw-input:focus { box-shadow:3px 3px 0 var(--red); }
+    .ipsw-submit { min-height:39px; padding:0 11px; border:2px solid var(--ink); background:var(--blue); color:var(--paper); cursor:pointer; font-size:10px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
+    .ipsw-submit:hover, .ipsw-submit:focus-visible { background:var(--ink); color:var(--yellow); }
+    .ipsw-form-note { margin-top:7px; color:var(--muted); font-size:9px; line-height:1.3; }
+    .ipsw-form-note a { color:var(--blue); font-weight:800; }
     footer { display:flex; justify-content:space-between; gap:10px; margin-top:12px; padding:10px 2px 0; color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
     footer a { color:var(--blue); }
     :focus-visible { outline:3px solid var(--red); outline-offset:3px; }
@@ -119,6 +133,10 @@
       .link-sub { white-space:normal; }
       .package-bottom { grid-template-columns:1fr 94px; gap:10px; }
       .qr { width:60px; height:60px; }
+      .ipsw-mini { padding:11px; }
+      .ipsw-mini h2 { font-size:19px; }
+      .ipsw-form { grid-template-columns:1fr; }
+      .ipsw-submit { min-height:39px; }
     }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
   </style>
@@ -169,6 +187,13 @@
         <div class="section-label"><span>elsewhere</span><span>say hi / help out</span></div>
         <div class="elsewhere"><a class="mini-link" href="https://discord.gg/Jmpzp36PfX" target="_blank" rel="noopener noreferrer">Discord <span>Join ↗</span></a><a class="mini-link" href="https://ko-fi.com/nxtcoreee3" target="_blank" rel="noopener noreferrer">Ko-fi <span>Support ↗</span></a></div>
 
+        <section class="ipsw-mini" aria-labelledby="ipsw-mini-heading">
+          <div class="ipsw-mini-top"><div><p class="section-kicker">fresh status</p><h2 id="ipsw-mini-heading">iOS signing check</h2><p>Enter an iPhone model or identifier to see the iOS versions Apple is signing right now.</p></div><span class="signal-seal" aria-hidden="true">✓</span></div>
+          <form class="ipsw-form" action="/ipsw/" method="get" id="ipsw-footer-form"><input class="ipsw-input" id="ipsw-footer-device" name="device" list="ipsw-device-options" type="search" autocomplete="off" placeholder="e.g. iPhone 15 or iPhone15,4" aria-label="Your iPhone model"><button class="ipsw-submit" type="submit">Check versions ↗</button></form>
+          <datalist id="ipsw-device-options"></datalist>
+          <p class="ipsw-form-note">Live data via <a href="https://ipsw.me/" target="_blank" rel="noopener noreferrer">IPSW Downloads ↗</a>. Not sure which model? The full checker can help.</p>
+        </section>
+
         <div class="package-bottom">
           <div>
             <p class="fine-print"><strong>INGREDIENTS:</strong> curiosity, late nights, questionable ideas, open source, and a suspicious amount of iOS exploiting.</p>
@@ -181,6 +206,26 @@
       <footer><span>nxtcoreee3 / 2026</span><a href="mailto:help.nxtcoreee3@gmail.com">email ↗</a></footer>
     </div>
   </div>
-  <script>async function copyAppSource(){const url='https://nxtcoreee3.online/apps.json';const label=document.getElementById('copy-source-label');try{await navigator.clipboard.writeText(url)}catch(error){const input=document.createElement('textarea');input.value=url;input.setAttribute('readonly','');input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();document.execCommand('copy');input.remove()}label.textContent='Copied!';setTimeout(()=>label.textContent='Copy link',1600)}</script>
+  <script>
+    /* Style reminder: utility behaviour stays low-noise; only a deliberate form submission opens the full results view. */
+    async function copyAppSource(){const url='https://nxtcoreee3.online/apps.json';const label=document.getElementById('copy-source-label');try{await navigator.clipboard.writeText(url)}catch(error){const input=document.createElement('textarea');input.value=url;input.setAttribute('readonly','');input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();document.execCommand('copy');input.remove()}label.textContent='Copied!';setTimeout(()=>label.textContent='Copy link',1600)}
+    (async function populateDeviceOptions(){
+      const list=document.getElementById('ipsw-device-options');
+      if(!list) return;
+      try{
+        const response=await fetch('https://api.ipsw.me/v4/devices');
+        if(!response.ok) throw new Error('Device list unavailable');
+        const devices=await response.json();
+        devices.filter(device=>/^iPhone/i.test(device.name)||/^iPhone/i.test(device.identifier)).forEach(device=>{
+          const option=document.createElement('option');
+          option.value=device.name;
+          option.label=device.identifier;
+          list.appendChild(option);
+        });
+      }catch(error){
+        /* The checker still accepts a hardware identifier when the convenience list is unavailable. */
+      }
+    })();
+  </script>
 </body>
 </html>
