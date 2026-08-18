@@ -5,6 +5,11 @@
       "source": "/Respring",
       "destination": "/Respring/respring.html",
       "permanent": false
+    },
+    {
+      "source": "/respring",
+      "destination": "/Respring/respring.html",
+      "permanent": false
     }
   ],
   "rewrites": [
