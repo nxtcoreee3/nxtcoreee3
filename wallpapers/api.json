@@ -1,0 +1,66 @@
+{
+  "name": "nxtcoreee3 Wallpapers Source",
+  "identifier": "com.nxtcoreee3.wallpapers",
+  "sourceURL": "https://nxtcoreee3.online/wallpapers/api.json",
+  "website": "https://nxtcoreee3.online/wallpapers",
+  "author": "nxtcoreee3",
+  "format": "tendies",
+  "formatVersion": 1,
+  "packs": [
+    {
+      "id": "allofus",
+      "name": "All of Us",
+      "description": "Just me or All of Us?",
+      "author": "nxtcoreee3",
+      "previewType": "video",
+      "versions": [
+        {
+          "label": "default",
+          "previewURL": "https://nxtcoreee3.online/wallpapers/allofus/preview.mp4",
+          "previewSize": 232412,
+          "downloadURL": "https://nxtcoreee3.online/wallpapers/allofus/all-of-us.tendies",
+          "size": 2616470
+        }
+      ]
+    },
+    {
+      "id": "awesomesauce",
+      "name": "awesomesauce",
+      "description": "this is so awesomesauceeee",
+      "author": "nxtcoreee3",
+      "previewType": "video",
+      "versions": [
+        {
+          "label": "default",
+          "previewURL": "https://nxtcoreee3.online/wallpapers/awesomesauce/preview.mp4",
+          "previewSize": 532487,
+          "downloadURL": "https://nxtcoreee3.online/wallpapers/awesomesauce/awesomesauce.tendies",
+          "size": 6872366
+        }
+      ]
+    },
+    {
+      "id": "sayyouswearbaby",
+      "name": "Say You Swear Baby",
+      "description": "nahhh did bro really do that???",
+      "author": "nxtcoreee3",
+      "previewType": "video",
+      "versions": [
+        {
+          "label": "light",
+          "previewURL": "https://nxtcoreee3.online/wallpapers/sayyouswearbaby/light/preview.mp4",
+          "previewSize": 515016,
+          "downloadURL": "https://nxtcoreee3.online/wallpapers/sayyouswearbaby/light/say-you-swear-baby-light.tendies",
+          "size": 2165946
+        },
+        {
+          "label": "dark",
+          "previewURL": "https://nxtcoreee3.online/wallpapers/sayyouswearbaby/dark/preview.mp4",
+          "previewSize": 388222,
+          "downloadURL": "https://nxtcoreee3.online/wallpapers/sayyouswearbaby/dark/say-you-swear-baby-dark.tendies",
+          "size": 2182413
+        }
+      ]
+    }
+  ]
+}
