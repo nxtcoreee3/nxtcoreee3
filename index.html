@@ -176,11 +176,16 @@
           <div class="source-actions"><a class="source-action" href="sidestore://source?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">SideStore</a><a class="source-action" href="altstore://source?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">AltStore</a><a class="source-action" href="Ksign://source/https://nxtcoreee3.online/apps.json">KSign</a><a class="source-action" href="esign://addsource?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">eSign</a></div>
         </section>
 
-        <div class="section-label"><span>contents / projects</span><span>open a link ↗</span></div>
-        <section class="links" aria-label="Projects">
+        <div class="section-label"><span>apps</span><span>downloadable ↗</span></div>
+        <section class="links" aria-label="Apps">
           <a class="link" href="https://github.com/nxtcoreee3/Bad-Poster" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/bad-poster-icon.png" alt=""></span><span><span class="link-title">Bad Poster</span><span class="link-sub">PosterBoard wallpapers for iOS on iOS 27</span></span><span class="link-end">↗</span></a>
           <a class="link" href="https://github.com/nxtcoreee3/godis" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/godis-icon.png" alt=""></span><span><span class="link-title">Godis</span><span class="link-sub">MobileGestalt customization for iOS</span></span><span class="link-end">↗</span></a>
-          <a class="link" href="https://github.com/nxtcoreee3/WaffleStore" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/wafflestore-icon.png" alt=""></span><span><span class="link-title">WaffleStore</span><span class="link-sub">Jailed App Store downgrader for iOS 16.4+ </span></span><span class="link-end">↗</span></a>
+          <a class="link" href="https://github.com/nxtcoreee3/WaffleStore" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/wafflestore-icon.png" alt=""></span><span><span class="link-title">WaffleStore</span><span class="link-sub">Jailed App Store downgrader for iOS 16.4+</span></span><span class="link-end">↗</span></a>
+        </section>
+
+        <div class="section-label"><span>projects</span><span>open a link ↗</span></div>
+        <section class="links" aria-label="Projects">
+          <a class="link" href="/wallpapers"><span class="link-icon"><img src="app%20icons/bad-poster-icon.png" alt=""></span><span><span class="link-title">Wallpapers</span><span class="link-sub">Preview + download .tendies packs for Bad Poster</span></span><span class="link-end">↗</span></a>
           <a class="link" href="https://www.figma.com/proto/UL9ltyqAUFLyO6l14BSkI8/nxtHub?page-id=0%3A1&node-id=17131-9738&p=f&viewport=1041%2C470%2C0.05&t=Z7kPwrzi9Gn5k89J-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=17131%3A9738" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/nxtHub-icon.png" alt=""></span><span><span class="link-title">nxtHub</span><span class="link-sub">Viral prototypes · Privacy Display · iSpoof26 · iSpoof18</span></span><span class="link-end">↗</span></a>
           <a class="link" href="https://nxtcoreee3.online/Flux" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/flux-icon.png" alt=""></span><span><span class="link-title">Flux</span><span class="link-sub">HTML5 browser gaming platform</span></span><span class="link-end">↗</span></a>
           <a class="link" href="https://nxtcoreee3.online/respring" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/webrespring-icon.png" alt=""></span><span><span class="link-title">WebRespring</span><span class="link-sub">tap to respring your iOS device!</span></span><span class="link-end">↗</span></a>
@@ -211,7 +216,6 @@
   </div>
   <script>
 
-    async function copyAppSource(){const url='https://nxtcoreee3.online/apps.json';const label=document.getElementById('copy-source-label');try{await navigator.clipboard.writeText(url)}catch(error){const input=document.createElement('textarea');input.value=url;input.setAttribute('readonly','');input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();document.execCommand('copy');input.remove()}label.textContent='Copied!';setTimeout(()=>label.textContent='Copy link',1600)}
     (async function populateDeviceOptions(){
       const list=document.getElementById('ipsw-device-options');
       if(!list) return;
