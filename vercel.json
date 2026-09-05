@@ -10,6 +10,16 @@
       "source": "/respring",
       "destination": "/Respring/respring.html",
       "permanent": false
+    },
+    {
+      "source": "/discord",
+      "destination": "https://discord.gg/Jmpzp36PfX",
+      "permanent": true
+    },
+    {
+      "source": "/Discord",
+      "destination": "https://discord.gg/Jmpzp36PfX",
+      "permanent": true
     }
   ],
   "rewrites": [
