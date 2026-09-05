@@ -20,6 +20,16 @@
       "source": "/Discord",
       "destination": "https://discord.gg/Jmpzp36PfX",
       "permanent": true
+    },
+    {
+      "source": "/wafflestore",
+      "destination": "/wafflestore.html",
+      "permanent": false
+    },
+    {
+      "source": "/Wafflestore",
+      "destination": "/wafflestore.html",
+      "permanent": false
     }
   ],
   "rewrites": [

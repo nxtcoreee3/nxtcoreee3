@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="WaffleStore has been temporarily discontinued because Apple's authentication backend changed.">
+  <meta name="theme-color" content="#f0e5c9">
+  <title>WaffleStore — End of Life</title>
+  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+  <style>
+    :root {
+      --paper:#caa06b;
+      --paper-deep:#b6854e;
+      --ink:#21170f;
+      --muted:#62472f;
+      --red:#a63c25;
+      --blue:#244f59;
+      --yellow:#dfad3e;
+      --cream:#f7f4e9;
+      --line:rgba(33,23,15,.78);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { background:var(--paper); }
+    body {
+      min-height:100dvh;
+      overflow-x:hidden;
+      color:var(--ink);
+      background:#b88750 url("app%20icons/package/cardboard-texture.avif") center top / 740px auto repeat;
+      font-family:Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    body::before { content:""; position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.08; background-image:repeating-linear-gradient(0deg, transparent 0 5px, rgba(33,23,15,.08) 5px 6px); background-size:100% 6px; mix-blend-mode:multiply; }
+    body::after { content:""; position:fixed; z-index:-1; pointer-events:none; width:280px; height:280px; right:-155px; top:32px; border:3px solid rgba(36,79,89,.22); border-radius:50%; box-shadow:0 0 0 16px rgba(36,79,89,.08), 0 0 0 31px rgba(166,60,37,.08); }
+    a { color:inherit; }
+    .wrap { width:min(100% - 24px, 660px); margin:0 auto; padding:16px 0 32px; }
+    .pack { position:relative; overflow:hidden; padding:17px; border:2px solid var(--ink); background:rgba(211,173,117,.76); box-shadow:6px 7px 0 var(--ink); }
+    .pack::before { content:""; position:absolute; inset:9px; border:1px solid rgba(23,23,20,.42); pointer-events:none; }
+    .top, main, footer { position:relative; z-index:1; }
+    .top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:3px 3px 13px; border-bottom:2px solid var(--ink); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .brand { display:flex; align-items:center; gap:8px; text-decoration:none; }
+    .brand-mark { width:29px; height:29px; overflow:hidden; border:2px solid var(--ink); border-radius:50%; background:var(--paper); }
+    .brand-mark img { width:100%; height:100%; display:block; object-fit:cover; }
+    .top-note { max-width:190px; color:var(--red); text-align:right; }
+    .hero { display:grid; grid-template-columns:92px 1fr; gap:16px; align-items:center; padding:26px 3px 20px; }
+    .app-icon { width:92px; height:92px; display:block; border:2px solid var(--ink); border-radius:19px; object-fit:cover; background:var(--paper); box-shadow:3px 3px 0 var(--ink); transform:rotate(-3deg); }
+    .kicker, .section-kicker { color:var(--red); font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin-top:3px; font-size:clamp(35px, 10vw, 58px); line-height:.88; letter-spacing:-.085em; text-transform:uppercase; }
+    .subtitle { margin-top:8px; color:var(--blue); font-size:12px; font-weight:800; }
+    .stamp { position:absolute; right:14px; top:19px; padding:6px 8px; border:2px solid var(--red); color:var(--red); font-size:9px; font-weight:800; letter-spacing:.08em; transform:rotate(7deg); }
+    .rule { height:8px; margin:0 3px 14px; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background:repeating-linear-gradient(135deg, transparent 0 5px, var(--ink) 5px 7px); }
+    .notice { padding:15px; border:2px solid var(--ink); background:var(--red); color:var(--cream); box-shadow:4px 4px 0 var(--ink); }
+    .notice h2 { font-size:clamp(25px, 7vw, 39px); line-height:.92; letter-spacing:-.07em; text-transform:uppercase; }
+    .notice p { margin-top:9px; font-size:12px; line-height:1.45; }
+    .notice strong { color:#ffd77a; }
+    .section { margin-top:17px; padding:13px; border:2px solid var(--ink); background:rgba(247,244,233,.84); }
+    .section h2 { margin-top:3px; font-size:23px; line-height:.95; letter-spacing:-.06em; text-transform:uppercase; }
+    .section p { margin-top:8px; color:var(--muted); font-size:12px; line-height:1.45; }
+    .facts { display:grid; gap:0; margin-top:12px; border-top:2px solid var(--ink); }
+    .fact { display:grid; grid-template-columns:112px 1fr; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:11px; line-height:1.35; }
+    .fact strong { color:var(--ink); font-size:10px; letter-spacing:.05em; text-transform:uppercase; }
+    .fact span { color:var(--muted); }
+    .warning { margin-top:17px; padding:12px 13px; border:2px solid var(--ink); border-left:7px solid var(--red); background:var(--yellow); }
+    .warning h2 { font-size:17px; letter-spacing:-.04em; text-transform:uppercase; }
+    .warning p { margin-top:5px; color:#4b3d20; font-size:11px; line-height:1.4; }
+    .actions { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; margin-top:17px; }
+    .action { min-height:45px; display:flex; align-items:center; justify-content:space-between; padding:0 11px; border:1px solid var(--ink); text-decoration:none; font-size:11px; font-weight:800; }
+    .action span { color:var(--red); font-size:18px; }
+    .action:hover, .action:focus-visible { background:var(--blue); color:var(--paper); }
+    footer { display:flex; justify-content:space-between; gap:10px; margin-top:13px; padding:10px 2px 0; color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    footer a { color:var(--blue); }
+    :focus-visible { outline:3px solid var(--red); outline-offset:3px; }
+    @media (max-width:520px) {
+      .wrap { width:min(100% - 16px, 660px); padding:8px 0 22px; }
+      .pack { padding:12px; box-shadow:4px 5px 0 var(--ink); }
+      .pack::before { inset:6px; }
+      .top { font-size:9px; }
+      .top-note { max-width:145px; }
+      .hero { grid-template-columns:68px 1fr; gap:12px; padding:21px 2px 16px; }
+      .app-icon { width:68px; height:68px; border-radius:14px; }
+      h1 { font-size:37px; }
+      .stamp { right:9px; top:11px; font-size:8px; }
+      .notice { padding:12px; }
+      .notice p, .section p { font-size:11px; }
+      .fact { grid-template-columns:91px 1fr; font-size:10px; }
+      .actions { grid-template-columns:1fr; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="pack">
+      <header class="top">
+        <a class="brand" href="/" aria-label="nxtcoreee3 home"><span class="brand-mark"><img src="app%20icons/nxtcoreee3-icon-app.png" alt=""></span><span>nxtcoreee3</span></a>
+        <span class="top-note">archive notice<br>handle with care</span>
+      </header>
+
+      <main>
+        <section class="hero">
+          <img class="app-icon" src="app%20icons/wafflestore-icon.png" alt="WaffleStore app icon">
+          <div><p class="kicker">project status</p><h1>WaffleStore</h1><p class="subtitle">a jailed app store downgrader</p></div>
+          <span class="stamp">END OF LIFE</span>
+        </section>
+
+        <div class="rule" aria-hidden="true"></div>
+
+        <section class="notice" aria-labelledby="notice-title">
+          <p class="kicker">important notice</p>
+          <h2 id="notice-title">Temporarily discontinued</h2>
+          <p>WaffleStore is no longer operational. Apple changed its authentication backend, so the method WaffleStore relied on can no longer be used. The app will not work until an alternative backend solution is found.</p>
+        </section>
+
+        <section class="section" aria-labelledby="about-title">
+          <p class="section-kicker">from the project file</p>
+          <h2 id="about-title">What WaffleStore was</h2>
+          <p>WaffleStore was a jailed app store app downgrader for iOS 16.4 and later. It did not use exploits and was based on the work of MuffinStoreJailed and PancakeStore.</p>
+          <div class="facts">
+            <div class="fact"><strong>Platform</strong><span>iPhone and iPad running iOS 16.4 or later</span></div>
+            <div class="fact"><strong>Category</strong><span>Jailed app store downgrader</span></div>
+            <div class="fact"><strong>Requirement</strong><span>Apple ID with two-factor authentication and a sideloading method</span></div>
+            <div class="fact"><strong>Status</strong><span>Repository remains available for reference; app functionality is unavailable</span></div>
+          </div>
+        </section>
+
+        <aside class="warning" aria-labelledby="warning-title">
+          <h2 id="warning-title">Do not rely on old builds</h2>
+          <p>Use WaffleStore at your own risk. Old copies may fail during authentication and could cause app-data loss or other damage. Do not contact the project expecting the discontinued backend to work.</p>
+        </aside>
+
+        <nav class="actions" aria-label="WaffleStore links">
+          <a class="action" href="https://github.com/nxtcoreee3/WaffleStore" target="_blank" rel="noopener noreferrer">View source on GitHub <span>↗</span></a>
+          <a class="action" href="/" >Back to nxtcoreee3 <span>←</span></a>
+        </nav>
+      </main>
+
+      <footer><span>wafflestore / archive</span><a href="https://github.com/nxtcoreee3/WaffleStore" target="_blank" rel="noopener noreferrer">source ↗</a></footer>
+    </div>
+  </div>
+</body>
+</html>
