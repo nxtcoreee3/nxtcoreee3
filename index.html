@@ -47,6 +47,13 @@
     .social { min-height:34px; display:inline-flex; align-items:center; gap:6px; padding:0 8px; border:1px solid var(--ink); background:rgba(255,255,255,.22); text-decoration:none; font-size:10px; font-weight:700; }
     .social img { width:14px; height:14px; display:block; object-fit:contain; filter:brightness(0); }
     .social:hover, .social:focus-visible { color:var(--paper); background:var(--blue); }
+    .tiktok-count { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:14px; padding:11px 12px; border:1px solid var(--ink); background:rgba(247,244,233,.58); color:var(--ink); }
+    .tiktok-count-copy { min-width:0; }
+    .tiktok-count-kicker { color:var(--muted); font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .tiktok-count h2 { margin-top:2px; font-size:16px; letter-spacing:-.04em; text-transform:uppercase; }
+    .tiktok-count-note { margin-top:3px; color:var(--muted); font-size:10px; }
+    .tiktok-count-value { flex:0 0 auto; color:var(--blue); font-size:24px; font-weight:900; letter-spacing:-.07em; }
+    .tiktok-count-value.is-loading { color:var(--muted); font-size:15px; letter-spacing:0; }
     .stamp { position:absolute; right:13px; top:16px; padding:6px 8px; border:2px solid var(--red); color:var(--red); font-size:9px; font-weight:800; letter-spacing:.08em; transform:rotate(7deg); }
     .rule { height:8px; margin:0 3px 13px; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background:repeating-linear-gradient(135deg, transparent 0 5px, var(--ink) 5px 7px); }
     .facts { margin-top:14px; padding:10px; border:2px solid #111; background:#f7f4e9; color:#111; }
@@ -168,7 +175,14 @@
           <a class="social" href="https://www.youtube.com/@nxtcoreee3" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=YouTube,%20Color=Negative.svg" alt="">YouTube</a>
         </nav>
 
-  
+        <section class="tiktok-count" aria-labelledby="tiktok-count-heading">
+          <div class="tiktok-count-copy">
+            <p class="tiktok-count-kicker">live from TikTok</p>
+            <h2 id="tiktok-count-heading">TikTok followers</h2>
+            <p class="tiktok-count-note" id="tiktok-count-status">Updating every 30 seconds</p>
+          </div>
+          <output class="tiktok-count-value is-loading" id="tiktok-count-value" aria-live="polite">loading…</output>
+        </section>
 
         <section class="source">
           <p class="section-kicker">serving suggestion</p><h2>nxtcoreee3s app source</h2><p>All my iOS apps in one place. Add it to the sideloader you use.</p>
@@ -215,6 +229,27 @@
     </div>
   </div>
   <script>
+    (async function loadTikTokFollowers(){
+      const value = document.getElementById('tiktok-count-value');
+      const status = document.getElementById('tiktok-count-status');
+      if(!value || !status) return;
+      const update = async () => {
+        try {
+          const response = await fetch('/api/tiktok-followers', { cache: 'no-store' });
+          if(!response.ok) throw new Error('Follower count unavailable');
+          const data = await response.json();
+          value.textContent = Number(data.followers).toLocaleString();
+          value.classList.remove('is-loading');
+          status.textContent = `Live count · updated ${new Date(data.updatedAt).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}`;
+        } catch(error) {
+          value.textContent = '—';
+          value.classList.add('is-loading');
+          status.textContent = 'Live count temporarily unavailable';
+        }
+      };
+      await update();
+      window.setInterval(update, 30000);
+    })();
 
     (async function populateDeviceOptions(){
       const list=document.getElementById('ipsw-device-options');
