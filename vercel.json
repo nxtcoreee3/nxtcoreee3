@@ -30,6 +30,21 @@
       "source": "/Wafflestore",
       "destination": "/wafflestore.html",
       "permanent": false
+    },
+    {
+      "source": "/bad-poster",
+      "destination": "/bad-poster.html",
+      "permanent": false
+    },
+    {
+      "source": "/Bad-Poster",
+      "destination": "/bad-poster.html",
+      "permanent": false
+    },
+    {
+      "source": "/godis",
+      "destination": "/godis.html",
+      "permanent": false
     }
   ],
   "rewrites": [
