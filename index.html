@@ -103,19 +103,6 @@
     .qr-link { display:block; flex:none; padding:4px; border:2px solid var(--ink); background:white; }
     .qr { display:block; width:68px; height:68px; image-rendering:pixelated; }
     .qr-copy { color:var(--muted); font-size:9px; line-height:1.3; }
-    .ipsw-mini { margin-top:17px; padding:13px; border:2px solid var(--ink); background:rgba(247,244,233,.82); color:var(--ink); }
-    .ipsw-mini-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-    .ipsw-mini h2 { margin-top:3px; font-size:21px; line-height:.95; letter-spacing:-.05em; text-transform:uppercase; }
-    .ipsw-mini p { max-width:440px; margin-top:5px; color:var(--muted); font-size:11px; line-height:1.35; }
-    .signal-seal { flex:none; display:grid; place-items:center; width:38px; height:38px; border:2px solid var(--ink); border-radius:50%; background:var(--yellow); color:var(--ink); font-size:19px; font-weight:900; }
-    .ipsw-form { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; margin-top:11px; }
-    .ipsw-input { min-width:0; height:39px; padding:0 10px; border:2px solid var(--ink); border-radius:0; background:#fffdf4; color:var(--ink); font:700 11px Arial, Helvetica, sans-serif; outline:none; }
-    .ipsw-input::placeholder { color:#8e7d68; }
-    .ipsw-input:focus { box-shadow:3px 3px 0 var(--red); }
-    .ipsw-submit { min-height:39px; padding:0 11px; border:2px solid var(--ink); background:var(--blue); color:var(--paper); cursor:pointer; font-size:10px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
-    .ipsw-submit:hover, .ipsw-submit:focus-visible { background:var(--ink); color:var(--yellow); }
-    .ipsw-form-note { margin-top:7px; color:var(--muted); font-size:9px; line-height:1.3; }
-    .ipsw-form-note a { color:var(--blue); font-weight:800; }
     .eol-modal[hidden] { display:none; }
     .eol-modal { position:fixed; inset:0; z-index:20; display:grid; place-items:center; padding:16px; background:rgba(33,23,15,.58); }
     .eol-dialog { width:min(100%, 430px); padding:17px; border:2px solid var(--ink); background:#b88750 url("app%20icons/package/cardboard-texture.avif") center / 740px auto repeat; color:var(--ink); box-shadow:6px 7px 0 var(--ink); }
@@ -153,10 +140,6 @@
       .link-sub { white-space:normal; }
       .package-bottom { grid-template-columns:1fr 94px; gap:10px; }
       .qr { width:60px; height:60px; }
-      .ipsw-mini { padding:11px; }
-      .ipsw-mini h2 { font-size:19px; }
-      .ipsw-form { grid-template-columns:1fr; }
-      .ipsw-submit { min-height:39px; }
     }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
   </style>
@@ -217,15 +200,14 @@
         </section>
         <p class="respring-warning" role="note"><strong>Important:</strong> Hold the WebRespring card to open it in preview mode. The preview is disabled after the respring, so you can open Safari safely afterward. Opening the page directly in Safari may keep its tab active and can trigger the respring again when Safari loads it.</p>
 
+        <div class="section-label"><span>tools</span><span>utilities ↗</span></div>
+        <section class="links" aria-label="Tools">
+          <a class="link" href="/ipsw/"><span class="link-icon"><img src="app%20icons/social%20media%20icons/Platform=Apple,%20Color=Negative.svg" alt=""></span><span><span class="link-title">Firmware Check</span><span class="link-sub">Check which iOS and iPadOS versions Apple is signing</span></span><span class="link-end">↗</span></a>
+          <a class="link" href="/blockota"><span class="link-icon"><img src="app%20icons/social%20media%20icons/Platform=Apple,%20Color=Negative.svg" alt=""></span><span><span class="link-title">Block OTA Profile</span><span class="link-sub">Install the noOTA profile to block automatic software updates</span></span><span class="link-end">↗</span></a>
+        </section>
+
         <div class="section-label"><span>elsewhere</span><span>say hi / help out</span></div>
         <div class="elsewhere"><a class="mini-link" href="https://discord.gg/Jmpzp36PfX" target="_blank" rel="noopener noreferrer">Discord <span>Join ↗</span></a><a class="mini-link" href="https://ko-fi.com/nxtcoreee3" target="_blank" rel="noopener noreferrer">Ko-fi <span>Support ↗</span></a></div>
-
-        <section class="ipsw-mini" aria-labelledby="ipsw-mini-heading">
-          <div class="ipsw-mini-top"><div><p class="section-kicker">fresh status</p><h2 id="ipsw-mini-heading">Firmware signing check</h2><p>Enter any Apple device model or identifier to see the firmware versions Apple is signing right now.</p></div><span class="signal-seal" aria-hidden="true">✓</span></div>
-          <form class="ipsw-form" action="/ipsw/" method="get" id="ipsw-footer-form"><input class="ipsw-input" id="ipsw-footer-device" name="device" list="ipsw-device-options" type="search" autocomplete="off" placeholder="e.g. iPad Pro or Watch7,1" aria-label="Your Apple device"><button class="ipsw-submit" type="submit">Check versions ↗</button></form>
-          <datalist id="ipsw-device-options"></datalist>
-          <p class="ipsw-form-note">Live data via <a href="https://ipsw.me/" target="_blank" rel="noopener noreferrer">IPSW Downloads ↗</a>. Not sure which model? The full checker can help.</p>
-        </section>
 
         <div class="package-bottom">
           <div>
@@ -290,23 +272,6 @@
       window.setInterval(update, 30000);
     })();
 
-    (async function populateDeviceOptions(){
-      const list=document.getElementById('ipsw-device-options');
-      if(!list) return;
-      try{
-        const response=await fetch('https://api.ipsw.me/v4/devices');
-        if(!response.ok) throw new Error('Device list unavailable');
-        const devices=await response.json();
-        devices.sort((first,second)=>first.name.localeCompare(second.name)).forEach(device=>{
-          const option=document.createElement('option');
-          option.value=device.name;
-          option.label=device.identifier;
-          list.appendChild(option);
-        });
-      }catch(error){
-
-      }
-    })();
   </script>
 </body>
 </html>

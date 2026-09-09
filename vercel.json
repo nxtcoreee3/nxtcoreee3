@@ -45,6 +45,16 @@
       "source": "/godis",
       "destination": "/godis.html",
       "permanent": false
+    },
+    {
+      "source": "/blockota",
+      "destination": "/blockota.html",
+      "permanent": false
+    },
+    {
+      "source": "/BlockOTA",
+      "destination": "/blockota.html",
+      "permanent": false
     }
   ],
   "rewrites": [
