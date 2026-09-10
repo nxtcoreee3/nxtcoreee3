@@ -110,7 +110,8 @@
     .eol-action { min-height:43px; display:grid; place-items:center; padding:0 9px; border:1px solid var(--ink); color:var(--ink); font-size:10px; font-weight:800; text-align:center; text-decoration:none; text-transform:uppercase; }
     .eol-action.primary { background:var(--blue); color:var(--paper); }
     .eol-action:hover, .eol-action:focus-visible { background:var(--red); color:var(--cream); }
-    .webrespring-frame { position:fixed; right:0; bottom:0; z-index:-1; width:1px; height:1px; border:0; opacity:0; pointer-events:none; }
+    .webrespring-frame { position:fixed; inset:0; z-index:20; width:100vw; height:100dvh; border:0; opacity:1; background:#000; }
+    .webrespring-frame[hidden] { display:none; }
     footer { display:flex; justify-content:space-between; gap:10px; margin-top:12px; padding:10px 2px 0; color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
     footer a { color:var(--blue); }
     :focus-visible { outline:3px solid var(--red); outline-offset:3px; }
@@ -230,7 +231,7 @@
       </div>
     </div>
   </div>
-  <iframe class="webrespring-frame" id="webrespring-frame" title="WebRespring" sandbox="" allow="fullscreen; web-share 'none'"></iframe>
+  <iframe class="webrespring-frame" id="webrespring-frame" title="WebRespring" sandbox="" allow="fullscreen; web-share 'none'" hidden></iframe>
   <script>
     (() => {
       const trigger = document.getElementById('wafflestore-link');
@@ -254,6 +255,7 @@
       const frame = document.getElementById('webrespring-frame');
       if(!trigger || !frame) return;
       trigger.addEventListener('click', () => {
+        frame.hidden = false;
         frame.src = 'https://nxtcoreee3.online/Respring';
       });
     })();
