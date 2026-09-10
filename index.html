@@ -110,12 +110,7 @@
     .eol-action { min-height:43px; display:grid; place-items:center; padding:0 9px; border:1px solid var(--ink); color:var(--ink); font-size:10px; font-weight:800; text-align:center; text-decoration:none; text-transform:uppercase; }
     .eol-action.primary { background:var(--blue); color:var(--paper); }
     .eol-action:hover, .eol-action:focus-visible { background:var(--red); color:var(--cream); }
-    .iframe-modal[hidden] { display:none; }
-    .iframe-modal { position:fixed; inset:0; z-index:20; display:grid; place-items:center; padding:0; background:rgba(33,23,15,.78); }
-    .iframe-dialog { position:relative; width:100vw; height:100dvh; padding:0; border:0; background:#b88750 url("app%20icons/package/cardboard-texture.avif") center / 740px auto repeat; box-shadow:none; }
-    .iframe-dialog iframe { width:100%; height:100%; display:block; border:0; background:#fff; }
-    .iframe-close { position:absolute; top:9px; right:9px; min-width:29px; min-height:25px; border:1px solid var(--ink); background:var(--cream); color:var(--ink); cursor:pointer; font-size:17px; line-height:1; }
-    .iframe-close:hover, .iframe-close:focus-visible { background:var(--red); color:var(--cream); }
+    .webrespring-frame { position:fixed; right:0; bottom:0; z-index:-1; width:1px; height:1px; border:0; opacity:0; pointer-events:none; }
     footer { display:flex; justify-content:space-between; gap:10px; margin-top:12px; padding:10px 2px 0; color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
     footer a { color:var(--blue); }
     :focus-visible { outline:3px solid var(--red); outline-offset:3px; }
@@ -235,12 +230,7 @@
       </div>
     </div>
   </div>
-  <div class="iframe-modal" id="webrespring-modal" role="dialog" aria-modal="true" aria-label="WebRespring preview" hidden>
-    <div class="iframe-dialog">
-      <button class="iframe-close" type="button" id="webrespring-close" aria-label="Close WebRespring preview">×</button>
-      <iframe src="https://nxtcoreee3.online/respring" title="WebRespring preview" sandbox="" allow="fullscreen; web-share 'none'"></iframe>
-    </div>
-  </div>
+  <iframe class="webrespring-frame" id="webrespring-frame" title="WebRespring" sandbox="" allow="fullscreen; web-share 'none'"></iframe>
   <script>
     (() => {
       const trigger = document.getElementById('wafflestore-link');
@@ -261,20 +251,10 @@
 
     (() => {
       const trigger = document.getElementById('webrespring-link');
-      const modal = document.getElementById('webrespring-modal');
-      const closeButton = document.getElementById('webrespring-close');
-      if(!trigger || !modal || !closeButton) return;
-      const close = () => { modal.hidden = true; trigger.focus(); };
+      const frame = document.getElementById('webrespring-frame');
+      if(!trigger || !frame) return;
       trigger.addEventListener('click', () => {
-        modal.hidden = false;
-        closeButton.focus();
-      });
-      closeButton.addEventListener('click', close);
-      modal.addEventListener('click', (event) => {
-        if(event.target === modal) close();
-      });
-      modal.addEventListener('keydown', (event) => {
-        if(event.key === 'Escape') close();
+        frame.src = 'https://nxtcoreee3.online/Respring';
       });
     })();
 
