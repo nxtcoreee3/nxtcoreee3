@@ -55,6 +55,11 @@
       "source": "/BlockOTA",
       "destination": "/blockota.html",
       "permanent": false
+    },
+     {
+      "source": "/Larp4JB",
+      "destination": "/Larp4jb.html",
+      "permanent": false
     }
   ],
   "rewrites": [
