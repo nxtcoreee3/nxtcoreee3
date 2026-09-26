@@ -1,240 +1,274 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script>
-    // Dynamic <base> so relative asset paths (style.css, script.js, assets/...)
-    // resolve correctly whether the site is hosted at its own root (Vercel)
-    // or reverse-proxied under a subpath like /Flux (with or without a
-    // trailing slash). Must run before any other resource tag in <head>.
-    (function () {
-      var path = window.location.pathname;
-      var base;
-      var subpathMatch = path.match(/^(\/Flux)(\/|$)/i);
-      if (subpathMatch) {
-        base = subpathMatch[1] + '/';
-      } else {
-        base = path.substring(0, path.lastIndexOf('/') + 1) || '/';
-      }
-      document.write('<base href="' + base + '">');
-    })();
-  </script>
-     <script>
-    // Apply dark/beta instantly before first paint to prevent flash
-    (function() {
-      try {
-        if (localStorage.getItem('flux_dark') === '1' || 
-            (localStorage.getItem('flux_dark') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        }
-        if (localStorage.getItem('flux_beta') === '1') {
-          document.documentElement.classList.add('beta');
-        }
-      } catch(e) {}
-    })();
-  </script>
-
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flux</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="assets/thumbnail.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Flux">
-  <meta name="theme-color" content="#0f1724">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="nxtcoreee3 — iOS tools, open-source projects, and links.">
+  <meta name="theme-color" content="#f0e5c9">
+  <title>nxtcoreee3</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+  <script defer src="speed-insights.js"></script>
   <style>
-    .hot-badge { position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#ef4444,#f59e0b);color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:0.5px;z-index:2;box-shadow:0 2px 8px rgba(239,68,68,0.4);display:inline-block;width:fit-content; }
-    .new-badge { position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:0.5px;z-index:2;box-shadow:0 2px 8px rgba(34,197,94,0.4);display:inline-block;width:fit-content; }
-    .compat-badge { display:inline-flex;align-items:center;background:rgba(58,125,255,0.1);color:var(--accent);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;border:1px solid rgba(58,125,255,0.2);cursor:help;position:relative;z-index:10; }
-    /* Flux hero: individual title letters respond to pointer hover and touch. */
-    .hero-light-title { cursor:default; touch-action:manipulation; }
-    .hero-letter { display:inline-block; color:inherit; transition:color 150ms cubic-bezier(.23,1,.32,1),text-shadow 150ms cubic-bezier(.23,1,.32,1),transform 150ms cubic-bezier(.23,1,.32,1); will-change:transform,color; }
-    .hero-letter.is-space { width:.26em; }
-    .hero-letter.is-lit { color:var(--accent); text-shadow:0 0 8px color-mix(in srgb,var(--accent) 65%,transparent),0 0 22px color-mix(in srgb,var(--accent) 38%,transparent); transform:translateY(-2px) scale(1.06); }
-    @media (prefers-reduced-motion: reduce) { .hero-letter { transition:none; } .hero-letter.is-lit { transform:none; } }
-  </style>
-  <style>
-    @media (max-width: 768px) {
-      #main-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex-wrap: nowrap !important; }
-      #main-nav::-webkit-scrollbar { display: none; }
+    
+    :root {
+      --paper:#caa06b;
+      --paper-deep:#b6854e;
+      --ink:#21170f;
+      --muted:#62472f;
+      --red:#a63c25;
+      --blue:#244f59;
+      --yellow:#dfad3e;
+      --line:rgba(33,23,15,.78);
+      --shadow:rgba(33,23,15,.24);
     }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { background:var(--paper); scroll-behavior:smooth; }
+    body { min-height:100dvh; overflow-x:hidden; color:var(--ink); background:#b88750 url("app%20icons/package/cardboard-texture.avif") center top / 740px auto repeat; font-family:Arial, Helvetica, sans-serif; -webkit-font-smoothing:antialiased; }
+    body::before { content:""; position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.08; background-image:repeating-linear-gradient(0deg, transparent 0 5px, rgba(33,23,15,.08) 5px 6px); background-size:100% 6px; mix-blend-mode:multiply; }
+    body::after { content:""; position:fixed; z-index:-1; pointer-events:none; width:280px; height:280px; right:-155px; top:32px; border:3px solid rgba(36,79,89,.22); border-radius:50%; box-shadow:0 0 0 16px rgba(36,79,89,.08), 0 0 0 31px rgba(166,60,37,.08); }
+    a { color:inherit; }
+    button { font:inherit; }
+    .wrap { width:min(100% - 24px, 660px); margin:0 auto; padding:16px 0 32px; }
+    .pack { position:relative; overflow:hidden; padding:17px; border:2px solid var(--ink); background:rgba(211,173,117,.76); box-shadow:6px 7px 0 var(--ink); }
+    .pack::before { content:""; position:absolute; inset:9px; border:1px solid rgba(23,23,20,.42); pointer-events:none; }
+    .top, .product, .stats, .source, .section-label, .links, .elsewhere, footer { position:relative; z-index:1; }
+    .top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:3px 3px 13px; border-bottom:2px solid var(--ink); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .brand { display:flex; align-items:center; gap:8px; text-decoration:none; }
+    .brand-mark { width:29px; height:29px; overflow:hidden; border:2px solid var(--ink); border-radius:50%; background:var(--paper); }
+    .brand-mark img { width:100%; height:100%; display:block; object-fit:cover; }
+    .top-note { max-width:170px; text-align:right; }
+    .product { display:grid; grid-template-columns:82px 1fr; gap:14px; align-items:center; padding:22px 3px 17px; }
+    .product-icon { width:82px; height:82px; display:block; border:2px solid var(--ink); border-radius:16px; object-fit:cover; background:var(--paper); box-shadow:3px 3px 0 var(--ink); transform:rotate(-3deg); }
+    .kicker { color:var(--red); font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin-top:3px; font-size:clamp(30px, 9vw, 52px); line-height:.9; letter-spacing:-.08em; text-transform:uppercase; }
+    .handle { margin-top:7px; color:var(--blue); font-size:12px; font-weight:700; }
+    .bio { margin-top:7px; color:var(--muted); font-size:12px; line-height:1.35; }
+    .socials { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+    .social { min-height:34px; display:inline-flex; align-items:center; gap:6px; padding:0 8px; border:1px solid var(--ink); background:rgba(255,255,255,.22); text-decoration:none; font-size:10px; font-weight:700; }
+    .social img { width:14px; height:14px; display:block; object-fit:contain; filter:brightness(0); }
+    .social:hover, .social:focus-visible { color:var(--paper); background:var(--blue); }
+    .tiktok-count { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:14px; padding:11px 12px; border:1px solid var(--ink); background:rgba(247,244,233,.58); color:var(--ink); }
+    .tiktok-count-copy { min-width:0; }
+    .tiktok-count-kicker { color:var(--muted); font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .tiktok-count h2 { margin-top:2px; font-size:16px; letter-spacing:-.04em; text-transform:uppercase; }
+    .tiktok-count-note { margin-top:3px; color:var(--muted); font-size:10px; }
+    .tiktok-count-value { flex:0 0 auto; color:var(--blue); font-size:24px; font-weight:900; letter-spacing:-.07em; }
+    .tiktok-count-value.is-loading { color:var(--muted); font-size:15px; letter-spacing:0; }
+    .stamp { position:absolute; right:13px; top:16px; padding:6px 8px; border:2px solid var(--red); color:var(--red); font-size:9px; font-weight:800; letter-spacing:.08em; transform:rotate(7deg); }
+    .rule { height:8px; margin:0 3px 13px; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background:repeating-linear-gradient(135deg, transparent 0 5px, var(--ink) 5px 7px); }
+    .facts { margin-top:14px; padding:10px; border:2px solid #111; background:#f7f4e9; color:#111; }
+    .facts-title { font-size:27px; line-height:.95; font-weight:900; letter-spacing:-.06em; }
+    .facts-subtitle { margin-top:3px; font-size:10px; }
+    .facts-rule { height:2px; margin:7px 0; background:#111; }
+    .facts-rule.thick { height:8px; margin:5px 0 4px; }
+    .facts-serving { display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:2px 0; font-size:12px; font-weight:800; }
+    .facts-dv { padding:3px 0; border-bottom:1px solid #111; text-align:right; font-size:9px; }
+    .facts-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; padding:4px 0; border-bottom:1px solid #111; font-size:12px; }
+    .facts-row strong { font-weight:900; }
+    .facts-foot { margin-top:5px; font-size:8px; line-height:1.3; }
+    .source { margin-top:14px; padding:13px; border:2px solid var(--ink); background:var(--yellow); }
+    .section-kicker { color:var(--red); font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .source h2 { margin-top:3px; font-size:21px; letter-spacing:-.05em; text-transform:uppercase; }
+    .source p { max-width:500px; margin-top:5px; color:#4b3d20; font-size:12px; line-height:1.35; }
+    .source-line { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:11px; padding-top:9px; border-top:1px solid rgba(23,23,20,.6); }
+    .source-url { min-width:0; overflow:hidden; color:var(--blue); font-family:monospace; font-size:10px; font-weight:700; text-overflow:ellipsis; white-space:nowrap; }
+    .copy-button { min-height:36px; flex:none; padding:0 10px; border:2px solid var(--ink); background:var(--paper); color:var(--ink); cursor:pointer; font-size:10px; font-weight:800; text-transform:uppercase; }
+    .copy-button:hover, .copy-button:focus-visible { background:var(--ink); color:var(--yellow); }
+    .source-actions { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-top:8px; }
+    .source-action { min-height:36px; display:grid; place-items:center; border:1px solid var(--ink); color:var(--ink); text-decoration:none; font-size:10px; font-weight:800; }
+    .source-action:hover, .source-action:focus-visible { background:var(--blue); color:var(--paper); }
+    .section-label { display:flex; justify-content:space-between; gap:12px; margin:17px 2px 7px; padding-bottom:5px; border-bottom:2px solid var(--ink); font-size:10px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
+    .section-label span:last-child { color:var(--red); }
+    .links { display:grid; gap:7px; }
+    .link { display:grid; grid-template-columns:48px minmax(0,1fr) auto; align-items:center; gap:10px; min-height:68px; padding:8px; border:1px solid var(--ink); background:rgba(255,255,255,.18); text-decoration:none; }
+    .link:hover, .link:focus-visible { background:rgba(31,96,114,.12); }
+    .link-button { width:100%; color:inherit; font:inherit; text-align:left; cursor:pointer; }
+    .link-icon { width:48px; height:48px; display:grid; place-items:center; overflow:hidden; border:0; background:transparent; color:var(--blue); font-size:9px; font-weight:900; }
+    .link-icon img { width:100%; height:100%; display:block; object-fit:cover; filter:none; }
+    .link-title { display:block; font-size:14px; font-weight:800; letter-spacing:-.02em; text-transform:uppercase; }
+    .link-sub { display:block; margin-top:3px; overflow:hidden; color:var(--muted); font-size:11px; line-height:1.3; text-overflow:ellipsis; white-space:nowrap; }
+    .link-end { color:var(--red); font-size:19px; font-weight:900; }
+    .elsewhere { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; }
+    .mini-link { min-height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 10px; border:1px solid var(--ink); text-decoration:none; font-size:11px; font-weight:800; }
+    .mini-link span { color:var(--red); font-size:9px; text-transform:uppercase; }
+    .mini-link:hover, .mini-link:focus-visible { background:var(--blue); color:var(--paper); }
+    .package-bottom { display:grid; grid-template-columns:1fr 108px; gap:14px; align-items:end; margin-top:18px; padding-top:13px; border-top:2px solid var(--ink); }
+    .fine-print { color:var(--muted); font-size:9px; line-height:1.35; }
+    .fine-print strong { color:var(--ink); }
+    .barcode { display:block; width:100%; height:auto; border:1px solid var(--ink); background:white; }
+    .qr-box { display:flex; align-items:center; gap:8px; margin-top:10px; }
+    .qr-link { display:block; flex:none; padding:4px; border:2px solid var(--ink); background:white; }
+    .qr { display:block; width:68px; height:68px; image-rendering:pixelated; }
+    .qr-copy { color:var(--muted); font-size:9px; line-height:1.3; }
+    .eol-modal[hidden] { display:none; }
+    .eol-modal { position:fixed; inset:0; z-index:20; display:grid; place-items:center; padding:16px; background:rgba(33,23,15,.58); }
+    .eol-dialog { width:min(100%, 430px); padding:17px; border:2px solid var(--ink); background:#b88750 url("app%20icons/package/cardboard-texture.avif") center / 740px auto repeat; color:var(--ink); box-shadow:6px 7px 0 var(--ink); }
+    .eol-dialog h2 { margin-top:4px; font-size:27px; line-height:.95; letter-spacing:-.06em; text-transform:uppercase; }
+    .eol-dialog p:not(.section-kicker) { margin-top:9px; padding:8px 9px; border:1px solid rgba(33,23,15,.32); background:rgba(247,244,233,.82); color:var(--ink); font-size:12px; line-height:1.45; }
+    .eol-actions { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; margin-top:15px; }
+    .eol-action { min-height:43px; display:grid; place-items:center; padding:0 9px; border:1px solid var(--ink); color:var(--ink); font-size:10px; font-weight:800; text-align:center; text-decoration:none; text-transform:uppercase; }
+    .eol-action.primary { background:var(--blue); color:var(--paper); }
+    .eol-action:hover, .eol-action:focus-visible { background:var(--red); color:var(--cream); }
+    footer { display:flex; justify-content:space-between; gap:10px; margin-top:12px; padding:10px 2px 0; color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    footer a { color:var(--blue); }
+    :focus-visible { outline:3px solid var(--red); outline-offset:3px; }
+    @media (max-width:520px) {
+      .wrap { width:min(100% - 16px, 660px); padding:8px 0 22px; }
+      .pack { padding:12px; box-shadow:4px 5px 0 var(--ink); }
+      .pack::before { inset:6px; }
+      .top { font-size:9px; }
+      .top-note { max-width:130px; }
+      .product { grid-template-columns:65px 1fr; gap:11px; padding:18px 2px 14px; }
+      .product-icon { width:65px; height:65px; border-radius:12px; }
+      h1 { font-size:33px; }
+      .bio { font-size:11px; }
+      .stamp { right:10px; top:10px; font-size:8px; }
+      .facts { padding:9px; }
+      .facts-title { font-size:23px; }
+      .facts-row { font-size:11px; }
+      .socials { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; }
+      .social { min-width:0; min-height:36px; justify-content:center; padding:0 3px; font-size:9px; }
+      .social img { width:13px; height:13px; }
+      .source { padding:11px; }
+      .source h2 { font-size:19px; }
+      .source-actions { grid-template-columns:repeat(2,1fr); }
+      .link { grid-template-columns:42px minmax(0,1fr) auto; min-height:70px; padding:8px; }
+      .link-icon { width:42px; height:42px; }
+      .link-sub { white-space:normal; }
+      .package-bottom { grid-template-columns:1fr 94px; gap:10px; }
+      .qr { width:60px; height:60px; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9156385751718783" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div id="global-page-loader" style="position:fixed;inset:0;background:#ffffff;z-index:9999999;display:flex;justify-content:center;align-items:center;transition:opacity 0.4s ease;pointer-events:none;">
-    <img src="assets/loading.gif" style="width:250px;height:auto;" alt="Loading...">
-  </div>
-  <script>
-    // Fast Boot: hide the white loader quickly (best effort)
-    (function(){
-      const hide = () => {
-        try { if (localStorage.getItem('flux_fast_boot') !== '1') return; } catch(e){ return; }
-        const el = document.getElementById('global-page-loader');
-        if (!el) return;
-        el.style.opacity = '0';
-        setTimeout(() => { try { el.remove(); } catch(e){} }, 420);
-      };
-      setTimeout(hide, 80);
-      requestAnimationFrame(hide);
-      window.addEventListener('pageshow', hide, { once: true });
-    })();
-  </script>
-
-  <header class="topbar">
-    <div class="brand">
-      <a href="index.html" class="logo"><img src="assets/logo.png" alt="Flux" style="height:32px;vertical-align:middle;margin-right:6px;"> FLUX</a>
-    </div>
-
-    <nav class="nav">
-      <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false">☰</button>
-      <ul id="main-nav" class="nav-list">
-        <li data-nav-item="home"><a href="index.html" class="active">Home</a></li>
-        <li data-nav-item="games"><a href="games.html">Games</a></li>
-        <li data-nav-item="websites"><a href="websites.html">Websites</a></li>
-        <li data-nav-item="social"><a href="social.html">Social</a></li>
-        <li data-nav-item="messages"><a href="messages.html">Messages</a></li>
-        <li data-nav-item="info"><a href="info.html">Info</a></li>
-        <li data-nav-item="credits"><a href="credits.html">Credits</a></li>
-        <li data-nav-item="donate"><a href="donate.html" class="accent">Donate</a></li>
-      </ul>
-    </nav>
-
-    <div class="right-actions">
-      <a class="icon-btn" href="https://github.com/nxtcoreee3/flux" target="_blank" rel="noopener">⭐ Star</a>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero glass">
-      <div class="hero-inner">
-        <h1 id="hero-light-title" class="hero-light-title" aria-label="Play great web games instantly">Play great web games instantly</h1>
-        <p>Curated game portal — quick to launch, clean UI, works well on any device.</p>
-        <div class="hero-actions">
-          <a href="games.html" class="btn-large">Browse Games</a>
-          <div style="display:flex;align-items:center;">
-            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
-            <script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#ffb812', 'R6R41RAS47');kofiwidget2.draw();</script>
-          </div>
-        </div>
-      </div>
-      <!-- Commits Panel -->
-      <div class="hero-commits" id="hero-commits">
-        <div class="commits-header">
-          <span id="commits-total-label" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;">Commits</span>
-          <span id="commits-live-dot" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);">
-            <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;animation:pulse-dot 2s infinite;"></span>Live
-          </span>
-        </div>
-        <div id="commits-list" style="display:flex;flex-direction:column;gap:6px;">
-          <div style="padding:16px 0;text-align:center;color:var(--muted);font-size:12px;">Loading commits...</div>
-        </div>
-        <a href="https://github.com/nxtcoreee3/flux/commits/main" target="_blank" rel="noopener" style="display:block;margin-top:10px;font-size:11px;color:var(--muted);text-decoration:none;text-align:right;">View all on GitHub →</a>
-      </div>
-    </section>
-
-    <section class="section featured">
-      <div id="flux-ad-banner" style="padding:0 0 4px;"></div>
-      <div class="section-head">
-        <h2>Featured</h2>
-        <div class="search-wrap">
-          <input id="quick-search" type="search" placeholder="Search games..." aria-label="Search games">
-        </div>
-      </div>
-      <div id="game-grid" class="grid"></div>
-    </section>
-
-    <section class="section how glass">
-      <h3>How it works</h3>
-      <p>Each game is hosted separately on its own public page. When you click Play Flux tries to load the game in a popup iframe. If a site prevents embedding, we provide a clear fallback to open the game in a new tab. Flux only links to public pages — it does not modify networks or bypass security systems.</p>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <a href="index.html" class="logo-small">FLUX</a>
-        <p>Curated links • Hosted games • Built by <a href="https://github.com/nxtcoreee3" target="_blank" rel="noopener">nxtcoreee3</a></p>
-      </div>
-      <div class="footer-links">
-        <a href="games.html">Games</a>
-        <a href="info.html">Info</a>
-        <a href="credits.html">Credits</a>
-        <a href="donate.html">Donate</a>
-      </div>
-      <div class="footer-actions">
-        <a class="star-btn" href="https://github.com/nxtcoreee3/flux" target="_blank" rel="noopener">⭐ Star this project</a>
-        <a class="coffee-btn" href="https://ko-fi.com/nxtcoreee3" target="_blank" rel="noopener">☕ Buy us a coffee</a>
-      </div>
-    </div>
-    <small class="copyright">Flux © <span id="year"></span> · All rights reserved</small>
-    <div class="visitor-counter" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-size:12px;color:var(--muted);">
-      <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 6px #22c55e;animation:pulse-dot 2s infinite;"></span>
-      <span><span id="visitor-count">—</span> online right now</span>
-    </div>
-  </footer>
-
-  <div id="play-modal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
-    <aside class="modal-panel" role="dialog" aria-modal="true" aria-label="Play game">
-      <header class="modal-header">
-        <div id="modal-title"><div style="display:flex;justify-content:center;padding:20px;"><img src="assets/loading.gif" style="width:80px;height:auto;" alt="Loading..."></div></div>
-        <div class="modal-tools">
-          <div id="modal-kill-btn-wrap"></div>
-          <button id="open-tab" class="tool-btn">Open in new tab</button>
-          <button id="close-modal" class="tool-btn" aria-label="Close">✕</button>
-        </div>
+  <div class="wrap">
+    <div class="pack">
+      <header class="top">
+        <a class="brand" href="#top" aria-label="nxtcoreee3 home"><span class="brand-mark"><img src="app%20icons/nxtcoreee3-icon-app.png" alt=""></span><span>nxtcoreee3</span></a>
+        <span class="top-note">open carefully<br>contents may be useful</span>
       </header>
-      <div class="modal-body">
-        <div id="iframe-wrap" class="iframe-wrap">
-          <iframe id="game-iframe" src="" frameborder="0" allow="autoplay; fullscreen" sandbox="allow-scripts allow-forms allow-same-origin"></iframe>
-        </div>
-        <div id="embed-warning" class="embed-warning hidden" style="text-align:center;">
-          <div style="font-size:24px;margin-bottom:8px;">🕒</div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Taking a while to load?</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">This site might be blocking embedding or just slow.</div>
-          <div style="display:flex;gap:8px;justify-content:center;">
-            <button id="keep-waiting" style="padding:6px 12px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">Keep Waiting</button>
-            <a href="social.html" style="padding:6px 12px;background:rgba(0,0,0,0.05);color:var(--text);border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Report to Admin</a>
-          </div>
-        </div>
-      </div>
-    </aside>
-  </div>
 
-  <script type="module" src="script.js"></script>
-  <script type="module" src="settings-tutorial.js"></script>
+      <main id="top">
+        <section class="product">
+          <img class="product-icon" src="app%20icons/nxtcoreee3-icon-app.png" alt="nxtcoreee3 app icon">
+          <div><p class="kicker">back of the box</p><h1>nxtcoreee3</h1><p class="handle">@nxtcoreee3</p><p class="bio">content creator, iOS exploiter and developer.</p></div>
+          <span class="stamp">100% INTERNET MADE</span>
+        </section>
+
+        <nav class="socials" aria-label="Social links">
+          <a class="social" href="https://www.instagram.com/pwn.nxtcoreee3" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=Instagram,%20Color=Negative.svg" alt="">Instagram</a>
+          <a class="social" href="https://www.tiktok.com/@nxtcoreee3" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=TikTok,%20Color=Negative.svg" alt="">TikTok</a>
+          <a class="social" href="https://www.snapchat.com/add/nxtcoreee3" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=Snapchat,%20Color=Negative.svg" alt="">Snapchat</a>
+          <a class="social" href="https://discord.gg/Jmpzp36PfX" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=Discord,%20Color=Negative.svg" alt="">Discord</a>
+          <a class="social" href="https://x.com/xnxtcoreee3" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=X%20(Twitter),%20Color=Negative.svg" alt="">X</a>
+          <a class="social" href="https://github.com/nxtcoreee3" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=Github,%20Color=Negative.svg" alt="">GitHub</a>
+          <a class="social" href="https://www.youtube.com/@nxtcoreee3" target="_blank" rel="noopener noreferrer"><img src="app%20icons/social%20media%20icons/Platform=YouTube,%20Color=Negative.svg" alt="">YouTube</a>
+        </nav>
+
+        <section class="tiktok-count" aria-labelledby="tiktok-count-heading">
+          <div class="tiktok-count-copy">
+            <p class="tiktok-count-kicker">live from TikTok</p>
+            <h2 id="tiktok-count-heading">TikTok followers</h2>
+            <p class="tiktok-count-note" id="tiktok-count-status">Updating every 30 seconds</p>
+          </div>
+          <output class="tiktok-count-value is-loading" id="tiktok-count-value" aria-live="polite">loading…</output>
+        </section>
+
+        <section class="source">
+          <p class="section-kicker">serving suggestion</p><h2>nxtcoreee3s app source</h2><p>All my iOS apps in one place. Add it to the sideloader you use.</p>
+          <div class="source-line"><span class="source-url">nxtcoreee3.online/apps.json</span><button class="copy-button" id="copy-source-label" onclick="copyAppSource()">Copy link</button></div>
+          <div class="source-actions"><a class="source-action" href="sidestore://source?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">SideStore</a><a class="source-action" href="altstore://source?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">AltStore</a><a class="source-action" href="Ksign://source/https://nxtcoreee3.online/apps.json">KSign</a><a class="source-action" href="esign://addsource?url=https%3A%2F%2Fnxtcoreee3.online%2Fapps.json">eSign</a></div>
+        </section>
+
+        <div class="section-label"><span>apps</span><span>downloadable ↗</span></div>
+        <section class="links" aria-label="Apps">
+          <a class="link" href="/bad-poster"><span class="link-icon"><img src="app%20icons/bad-poster-icon.png" alt=""></span><span><span class="link-title">Bad Poster</span><span class="link-sub">PosterBoard wallpapers for iOS on iOS 27</span></span><span class="link-end">↗</span></a>
+          <a class="link" href="/godis"><span class="link-icon"><img src="app%20icons/godis-icon.png" alt=""></span><span><span class="link-title">Godis</span><span class="link-sub">MobileGestalt customization for iOS</span></span><span class="link-end">↗</span></a>
+          <button class="link link-button" type="button" id="wafflestore-link" aria-haspopup="dialog" aria-controls="wafflestore-eol-modal"><span class="link-icon"><img src="app%20icons/wafflestore-icon.png" alt=""></span><span><span class="link-title">WaffleStore</span><span class="link-sub">Jailed App Store downgrader for iOS 16.4+</span></span><span class="link-end">↗</span></button>
+        </section>
+
+        <div class="section-label"><span>projects</span><span>open a link ↗</span></div>
+        <section class="links" aria-label="Projects">
+          <a class="link" href="/wallpapers"><span class="link-icon"><img src="app%20icons/wallpapers-icon.png" alt=""></span><span><span class="link-title">Wallpapers</span><span class="link-sub">Preview + download .tendies packs for Bad Poster</span></span><span class="link-end">↗</span></a>
+          <a class="link" href="https://www.figma.com/proto/UL9ltyqAUFLyO6l14BSkI8/nxtHub?page-id=0%3A1&node-id=17131-9738&p=f&viewport=1041%2C470%2C0.05&t=Z7kPwrzi9Gn5k89J-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=17131%3A9738" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/nxtHub-icon.png" alt=""></span><span><span class="link-title">nxtHub</span><span class="link-sub">Viral prototypes · Privacy Screen · iSpoof26 · iSpoof18</span></span><span class="link-end">↗</span></a>
+          <a class="link" href="https://nxtcoreee3.online/Flux" target="_blank" rel="noopener noreferrer"><span class="link-icon"><img src="app%20icons/flux-icon.png" alt=""></span><span><span class="link-title">Flux</span><span class="link-sub">HTML5 browser gaming platform</span></span><span class="link-end">↗</span></a>
+          <a class="link" href="https://nxtcoreee3.online/Respring"><span class="link-icon"><img src="app%20icons/webrespring-icon.png" alt=""></span><span><span class="link-title">WebRespring</span><span class="link-sub">tap to respring your iOS device!</span></span><span class="link-end">↗</span></a>
+        </section>
+
+        <div class="section-label"><span>tools</span><span>utilities ↗</span></div>
+        <section class="links" aria-label="Tools">
+          <a class="link" href="/ipsw/"><span class="link-icon"><img src="app%20icons/firmware-check-icon.png" alt=""></span><span><span class="link-title">Firmware Check</span><span class="link-sub">Check which iOS and iPadOS versions Apple is signing</span></span><span class="link-end">↗</span></a>
+          <a class="link" href="/blockota"><span class="link-icon"><img src="app%20icons/blockota-icon.png" alt=""></span><span><span class="link-title">Block OTA Profile</span><span class="link-sub">Install the noOTA profile to block automatic software updates</span></span><span class="link-end">↗</span></a>
+        </section>
+
+        <div class="section-label"><span>elsewhere</span><span>say hi / help out</span></div>
+        <div class="elsewhere"><a class="mini-link" href="https://discord.gg/Jmpzp36PfX" target="_blank" rel="noopener noreferrer">Discord <span>Join ↗</span></a><a class="mini-link" href="https://ko-fi.com/nxtcoreee3" target="_blank" rel="noopener noreferrer">Ko-fi <span>Support ↗</span></a></div>
+
+        <div class="package-bottom">
+          <div>
+            <p class="fine-print"><strong>INGREDIENTS:</strong> curiosity, late nights, questionable ideas, open source, and a suspicious amount of iOS exploiting.</p>
+            <p class="fine-print" style="margin-top:8px"><strong>HANDLING:</strong> click responsibly. Best enjoyed with Wi-Fi.</p>
+            <div class="qr-box"><a class="qr-link" href="https://nxtcoreee3.online" target="_blank" rel="noopener noreferrer"><img class="qr" src="app%20icons/package/qr-code.gif" alt="QR code linking to nxtcoreee3.online"></a><span class="qr-copy">scan for the<br>freshest batch</span></div>
+          </div>
+          <a href="https://nxtcoreee3.online" target="_blank" rel="noopener noreferrer" aria-label="Barcode linking to nxtcoreee3.online"><img class="barcode" src="app%20icons/package/barcode.gif" alt="Barcode for nxtcoreee3.online"></a>
+        </div>
+      </main>
+      <footer><span>nxtcoreee3 / 2026</span><a href="mailto:help.nxtcoreee3@gmail.com">email ↗</a></footer>
+    </div>
+  </div>
+  <div class="eol-modal" id="wafflestore-eol-modal" role="dialog" aria-modal="true" aria-labelledby="wafflestore-eol-title" hidden>
+    <div class="eol-dialog">
+      <p class="section-kicker">project status</p>
+      <h2 id="wafflestore-eol-title">WaffleStore is EoL</h2>
+      <p>WaffleStore is currently end of life and its old builds no longer work because Apple changed its authentication backend.</p>
+      <div class="eol-actions">
+        <a class="eol-action primary" href="/wafflestore">Read more</a>
+        <a class="eol-action" href="https://github.com/nxtcoreee3/WaffleStore" target="_blank" rel="noopener noreferrer">Continue anyways</a>
+      </div>
+    </div>
+  </div>
   <script>
-    // Home hero: split the visible phrase into decorative letters while retaining one accessible heading label.
-    (function () {
-      const headline = document.getElementById('hero-light-title');
-      if (!headline) return;
-      const phrase = headline.textContent.trim();
-      const fragment = document.createDocumentFragment();
-      Array.from(phrase).forEach(function (character) {
-        const letter = document.createElement('span');
-        letter.className = character === ' ' ? 'hero-letter is-space' : 'hero-letter';
-        letter.setAttribute('aria-hidden', 'true');
-        letter.textContent = character === ' ' ? '\u00a0' : character;
-        if (character !== ' ') {
-          let touchTimer;
-          const light = function () { letter.classList.add('is-lit'); };
-          const dim = function () { letter.classList.remove('is-lit'); };
-          letter.addEventListener('pointerenter', function (event) { if (event.pointerType !== 'touch') light(); });
-          letter.addEventListener('pointerleave', function (event) { if (event.pointerType !== 'touch') dim(); });
-          letter.addEventListener('pointerdown', function (event) {
-            if (event.pointerType !== 'touch') return;
-            light(); clearTimeout(touchTimer);
-            touchTimer = setTimeout(dim, 520);
-          });
-        }
-        fragment.appendChild(letter);
+    (() => {
+      const trigger = document.getElementById('wafflestore-link');
+      const modal = document.getElementById('wafflestore-eol-modal');
+      if(!trigger || !modal) return;
+      const close = () => { modal.hidden = true; trigger.focus(); };
+      trigger.addEventListener('click', () => {
+        modal.hidden = false;
+        modal.querySelector('a').focus();
       });
-      headline.textContent = '';
-      headline.appendChild(fragment);
+      modal.addEventListener('click', (event) => {
+        if(event.target === modal) close();
+      });
+      modal.addEventListener('keydown', (event) => {
+        if(event.key === 'Escape') close();
+      });
     })();
+
+    (async function loadTikTokFollowers(){
+      const value = document.getElementById('tiktok-count-value');
+      const status = document.getElementById('tiktok-count-status');
+      if(!value || !status) return;
+      const update = async () => {
+        try {
+          const response = await fetch('/api/tiktok-followers', { cache: 'no-store' });
+          if(!response.ok) throw new Error('Follower count unavailable');
+          const data = await response.json();
+          value.textContent = Number(data.followers).toLocaleString();
+          value.classList.remove('is-loading');
+          status.textContent = `Live count · updated ${new Date(data.updatedAt).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}`;
+        } catch(error) {
+          value.textContent = '—';
+          value.classList.add('is-loading');
+          status.textContent = 'Live count temporarily unavailable';
+        }
+      };
+      await update();
+      window.setInterval(update, 30000);
+    })();
+
   </script>
 </body>
 </html>

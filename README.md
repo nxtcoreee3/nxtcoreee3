@@ -1,57 +1,20 @@
-# Flux
+# hi im nxtcoreee3
 
-Flux is a lightweight browser game portal that provides quick and simple access to web-based games.
-It focuses on speed, simplicity, and a clean interface that makes playing browser games easy.
+## 👀 Profile Views:
+![](https://komarev.com/ghpvc/?username=nxtcoreee3&)
 
-The project is designed to be minimal and easy to expand, allowing new games to be added quickly.
+## 🌐 Socials:
+[![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?logo=discord&logoColor=white)](https://discord.gg/https://discord.gg/tweakbreak-1443331342799601666) [![TikTok](https://img.shields.io/badge/TikTok-%23000000.svg?logo=TikTok&logoColor=white)](https://tiktok.com/@nxtcoreee3) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/Xnxtcoreee3) [![email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:help.nxtcoreee3@gmail.com) 
 
-⸻
+## 💻 Tech Stack:
+![Swift](https://img.shields.io/badge/swift-F54A2A?style=flat&logo=swift&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=flat&logo=javascript&logoColor=%23F7DF1E) ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=flat&logo=firebase) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=flat&logo=figma&logoColor=white) ![Canva](https://img.shields.io/badge/Canva-%2300C4CC.svg?style=flat&logo=Canva&logoColor=white) ![Sketch](https://img.shields.io/badge/Sketch-FFB387?style=flat&logo=sketch&logoColor=black) ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=flat&logo=vercel&logoColor=white) ![Netlify](https://img.shields.io/badge/netlify-%23000000.svg?style=flat&logo=netlify&logoColor=#00C7B7)
+## 📊 GitHub Stats:
+![](https://github-readme-stats.shion.dev/api?username=nxtcoreee3&theme=dark&hide_border=false&include_all_commits=true&count_private=false)<br/>
+![](https://streak-stats.demolab.com/?user=nxtcoreee3&theme=dark&hide_border=false)<br/>
+![](https://github-readme-stats.shion.dev/api/top-langs/?username=nxtcoreee3&theme=dark&hide_border=false&include_all_commits=true&count_private=false&layout=compact)
 
-# How Flux Works
+---
 
-Flux itself does not host the games directly.
+  ## 💰 You can help me by Donating
+  [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/nxtcoreee3) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/nxtcoreee3) 
 
-Instead, the games are hosted on separate GitHub Pages sites. Flux works as a directory that links to those hosted pages.
-
-When a user presses Play, they are redirected to the page where the game is hosted and can immediately start playing in their browser.
-
-⸻
-
-# Support the Project
-
-If you enjoy Flux, you can support the project:
-
-⭐ Star the repository
-
-☕ Buy us a coffee on Ko-Fi
-
-⸻
-
-# Domains
-
-Main Domain: [nxtcoreee3.online/Flux](https://nxtcoreee3.online/Flux)
-
-Second Domain: [nxtcoreee3.github.io/Flux/](https://nxtcoreee3.github.io/Flux)
-
-Vercel Domain: [flux-xi-bice.vercel.app](https://flux-xi-bice.vercel.app/)
-
-⸻
-
-# Credits
-
-Created by nxtcoreee3
-
-TikTok
-https://tiktok.com/@nxtcoreee3
-
-Instagram
-https://instagram.com/nxtcoreee3
-
-GitHub
-https://github.com/nxtcoreee3
-
-⸻
-
-# License
-
-This project is released as an open project and can be modified or expanded with credits being kept.
