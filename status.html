@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>
+    // Dynamic <base> so relative asset paths (style.css, script.js, assets/...)
+    // resolve correctly whether the site is hosted at its own root (Vercel)
+    // or reverse-proxied under a subpath like /Flux (with or without a
+    // trailing slash). Must run before any other resource tag in <head>.
+    (function () {
+      var path = window.location.pathname;
+      var base;
+      var subpathMatch = path.match(/^(\/Flux)(\/|$)/i);
+      if (subpathMatch) {
+        base = subpathMatch[1] + '/';
+      } else {
+        base = path.substring(0, path.lastIndexOf('/') + 1) || '/';
+      }
+      document.write('<base href="' + base + '">');
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Flux Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function() {
+      try {
+        if (localStorage.getItem('flux_dark') === '1' ||
+            (localStorage.getItem('flux_dark') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+        if (localStorage.getItem('flux_beta') === '1') document.documentElement.classList.add('beta');
+      } catch(e) {}
+    })();
+  </script>
+  <style>
+    .status-page { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+    .status-hero { text-align: center; padding: 48px 20px 36px; }
+    .status-globe { font-size: 56px; margin-bottom: 16px; display: block; }
+    .status-headline { font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin: 0 0 8px; color: var(--text); }
+    .status-sub { font-size: 14px; color: var(--muted); margin: 0 0 20px; }
+    .overall-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: 30px; font-size: 14px; font-weight: 700;
+      margin-bottom: 8px; transition: all 0.3s;
+    }
+    .overall-pill.operational { background: rgba(34,197,94,0.12); color: #16a34a; border: 1px solid rgba(34,197,94,0.25); }
+    .overall-pill.degraded   { background: rgba(245,158,11,0.12); color: #92400e; border: 1px solid rgba(245,158,11,0.25); }
+    .overall-pill.outage     { background: rgba(239,68,68,0.1);   color: #991b1b; border: 1px solid rgba(239,68,68,0.2); }
+    .status-updated { font-size: 12px; color: var(--muted); }
+
+    .status-section-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 12px; }
+    .status-card { background: var(--panel); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; margin-bottom: 10px; }
+    .status-row { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; border-bottom: 1px solid var(--glass-border); transition: background 0.15s; }
+    .status-row:last-child { border-bottom: none; }
+    .status-row-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .status-row-body { flex: 1; min-width: 0; }
+    .status-row-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .status-row-name { font-size: 15px; font-weight: 700; color: var(--text); }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 800; padding: 2px 9px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0;
+    }
+    .status-badge.operational { background: rgba(34,197,94,0.12);  color: #16a34a; }
+    .status-badge.degraded    { background: rgba(245,158,11,0.12); color: #92400e; }
+    .status-badge.outage      { background: rgba(239,68,68,0.1);   color: #991b1b; }
+    .status-badge.checking    { background: rgba(107,114,128,0.1); color: #6b7280; }
+    .status-flag-pill {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: rgba(0,0,0,0.05); color: var(--muted);
+      font-size: 9px; font-weight: 800; padding: 1px 7px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    html.dark .status-flag-pill { background: rgba(255,255,255,0.07); }
+    .status-row-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 4px; }
+    .status-row-time { font-size: 11px; color: var(--muted); margin-top: 6px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+    .status-dot.operational { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.5); animation: pulse-dot 2s infinite; }
+    .status-dot.degraded    { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.5); animation: pulse-dot 2s infinite; }
+    .status-dot.outage      { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); animation: pulse-dot 1.2s infinite; }
+    .status-dot.checking    { background: #9ca3af; }
+
+    /* Incident history */
+    .incident-item { padding: 14px 20px; border-bottom: 1px solid var(--glass-border); }
+    .incident-item:last-child { border-bottom: none; }
+    .incident-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .incident-body  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .incident-meta  { font-size: 11px; color: var(--muted); margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    /* Refresh button */
+    .refresh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .refresh-btn:hover { background: rgba(58,125,255,0.07); border-color: rgba(58,125,255,0.3); color: var(--accent); }
+    .spinning { animation: spin 1s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(1.3); } }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9156385751718783" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="global-page-loader" style="position:fixed;inset:0;background:#ffffff;z-index:9999999;display:flex;justify-content:center;align-items:center;transition:opacity 0.4s ease;pointer-events:none;">
+    <img src="assets/loading.gif" style="width:250px;height:auto;" alt="Loading...">
+  </div>
+  <script>
+    // Fast Boot: hide the white loader quickly (best effort)
+    (function(){
+      const hide = () => {
+        try { if (localStorage.getItem('flux_fast_boot') !== '1') return; } catch(e){ return; }
+        const el = document.getElementById('global-page-loader');
+        if (!el) return;
+        el.style.opacity = '0';
+        setTimeout(() => { try { el.remove(); } catch(e){} }, 420);
+      };
+      setTimeout(hide, 80);
+      requestAnimationFrame(hide);
+      window.addEventListener('pageshow', hide, { once: true });
+    })();
+  </script>
+
+  <header class="topbar">
+    <div class="brand">
+      <a href="index.html" class="logo"><img src="assets/logo.png" alt="Flux" style="height:32px;vertical-align:middle;margin-right:6px;"> FLUX</a>
+    </div>
+    <nav class="nav" id="main-nav">
+      <ul class="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="games.html">Games</a></li>
+        <li><a href="social.html">Social</a></li>
+        <li><a href="info.html">Info</a></li>
+        <li><a href="credits.html">Credits</a></li>
+        <li><a href="donate.html">Donate</a></li>
+      </ul>
+    </nav>
+    <div class="right-actions" id="right-actions"></div>
+  </header>
+
+  <!-- Small, out-of-the-way indicator for background checks — never covers or replaces the last known status -->
+  <div id="bg-check-indicator" style="position:fixed;bottom:18px;right:18px;z-index:500;display:none;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--glass-border);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--muted);box-shadow:0 4px 14px rgba(0,0,0,0.12);">
+    <span class="spinning" style="display:inline-block;">↻</span> Checking…
+  </div>
+
+  <main class="status-page">
+    <div class="status-hero">
+      <span class="status-globe">🛰️</span>
+      <h1 class="status-headline">Flux Status</h1>
+      <p class="status-sub">Real-time health monitoring for all Flux services.</p>
+      <div class="overall-pill checking" id="overall-pill">
+        <span id="overall-dot" style="width:8px;height:8px;border-radius:50%;background:#9ca3af;"></span>
+        <span id="overall-text">Checking systems...</span>
+      </div>
+      <div class="status-updated" id="last-updated"></div>
+      <div style="margin-top:14px;">
+        <button class="refresh-btn" id="refresh-btn">
+          <span id="refresh-icon">↻</span> Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Services -->
+    <div class="status-section-label">Services</div>
+    <div class="status-card" id="services-card">
+      <!-- Filled by JS -->
+      <div style="padding:32px;text-align:center;color:var(--muted);font-size:13px;"><div style="display:flex;justify-content:center;padding:20px;"><img src="assets/loading.gif" style="width:80px;height:auto;" alt="Loading..."></div></div>
+    </div>
+
+    <!-- Domains -->
+    <div class="status-section-label">Domains</div>
+    <div class="status-card" id="domains-card">
+      <!-- Filled by JS -->
+      <div style="padding:32px;text-align:center;color:var(--muted);font-size:13px;"><div style="display:flex;justify-content:center;padding:20px;"><img src="assets/loading.gif" style="width:80px;height:auto;" alt="Loading..."></div></div>
+    </div>
+
+    <!-- Active incidents -->
+    <div class="status-section-label" id="incidents-label" style="display:none;">Active Incidents</div>
+    <div class="status-card" id="incidents-card" style="display:none;"></div>
+
+    <!-- Last checked -->
+    <div style="text-align:center;margin-top:32px;">
+      <p style="font-size:12px;color:var(--muted);">Status checks run automatically everytime someone enters this page. You can manually refresh the status page every 5 minutes. Data is sourced from Firebase Firestore and real-time health probes. <a href="https://status.firebase.google.com" target="_blank" rel="noopener" style="color:var(--accent);">Firebase status ↗</a></p>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initAuthUI, initDarkMode, initPresence, initIncidentBanner, autoCheckServiceHealth, DOMAIN_META, onAuthChange, FLUX_OWNER_UID } from './firebase-auth.js';
+    import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, doc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    initDarkMode();
+    initAuthUI(() => {});
+    initPresence();
+    initIncidentBanner();
+
+    // Devs/admin bypass the 5-minute refresh cooldown entirely — everyone
+    // else stays rate limited.
+    let _isDev = false;
+    onAuthChange(user => {
+      _isDev = !!user && user.uid === FLUX_OWNER_UID;
+      updateRefreshButtonState();
+      if (_isDev && getRemainingCooldownMs() > 0) runHealthCheck(); // dev signed in after page load — give them a fresh check right away
+    });
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHm6nxHzrIGHmWb1W_xDAYwnSoed6oTi4",
+      authDomain: "fluxbynxtcoreee3.firebaseapp.com",
+      projectId: "fluxbynxtcoreee3",
+      storageBucket: "fluxbynxtcoreee3.firebasestorage.app",
+      messagingSenderId: "1003023583985",
+      appId: "1:1003023583985:web:58cec1087f433e2af97750",
+      databaseURL: "https://fluxbynxtcoreee3-default-rtdb.europe-west1.firebasedatabase.app"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const SERVICE_META = {
+      firestore:  { name: 'Database (Firestore)', icon: '🔥' },
+      googleAuth: { name: 'Authentication (Google)', icon: '🔐' },
+      website:    { name: 'Website & Interface', icon: '🌐' },
+      games:      { name: 'Games', icon: '🎮' },
+    };
+
+    const STATUS_DOT_COLOR = { operational: '#22c55e', degraded: '#f59e0b', outage: '#ef4444', checking: '#9ca3af' };
+    const STATUS_LABEL = { operational: '✅ Operational', degraded: '⚠️ Degraded', outage: '🔴 Outage', checking: '⏳ Checking' };
+    let _hasRenderedRealData = false;
+    let _lastDetectedAt = null;
+
+    // Rate limit: this browser can only trigger a fresh probe (page-load or
+    // manual refresh — doesn't matter which) once every 5 minutes. Anything
+    // else viewers see is the last cached result from Firestore, delivered
+    // live via onSnapshot below at no extra probe cost.
+    // Note: this is a per-browser limit via localStorage, not a true per-IP
+    // limit — a static site with no backend can't enforce that server-side.
+    const REFRESH_COOLDOWN_MS = 5 * 60 * 1000;
+    const LAST_REFRESH_KEY = 'flux_status_last_refresh';
+    function getRemainingCooldownMs() {
+      if (_isDev) return 0; // devs bypass the cooldown entirely
+      const last = parseInt(localStorage.getItem(LAST_REFRESH_KEY) || '0', 10);
+      return Math.max(0, REFRESH_COOLDOWN_MS - (Date.now() - last));
+    }
+    function markRefreshed() {
+      localStorage.setItem(LAST_REFRESH_KEY, String(Date.now()));
+    }
+    function formatCooldown(ms) {
+      const totalSec = Math.ceil(ms / 1000);
+      const m = Math.floor(totalSec / 60);
+      const s = totalSec % 60;
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function timeAgo(iso) {
+      if (!iso) return '';
+      const diff = Date.now() - new Date(iso).getTime();
+      const m = Math.floor(diff / 60000);
+      if (m < 1) return 'just now';
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      return `${Math.floor(h / 24)}d ago`;
+    }
+
+    function renderServices(services) {
+      const card = document.getElementById('services-card');
+      const keys = ['firestore', 'googleAuth', 'website', 'games'];
+      const domainKeys = DOMAIN_META.map(d => d.key);
+      const knownKeys = new Set([...keys, ...domainKeys]);
+      const customKeys = Object.keys(services || {}).filter(k => !knownKeys.has(k));
+      const allKeys = [...keys, ...domainKeys, ...customKeys];
+      const statuses = allKeys.map(k => services?.[k]?.status || 'checking');
+      const overallStatus = statuses.includes('outage') ? 'outage' : (statuses.includes('degraded') || statuses.includes('warning')) ? 'degraded' : statuses.every(s => s === 'operational') ? 'operational' : 'checking';
+
+      // Once we've shown real data, never let a partial/incomplete update
+      // regress the page back to a generic "checking" state — keep showing
+      // the last known status instead. A tiny corner indicator (not this)
+      // is what signals a background check is running.
+      if (overallStatus === 'checking' && _hasRenderedRealData) return;
+      if (overallStatus !== 'checking') _hasRenderedRealData = true;
+
+      // Overall pill
+      const pill = document.getElementById('overall-pill');
+      const dot = document.getElementById('overall-dot');
+      const text = document.getElementById('overall-text');
+      pill.className = `overall-pill ${overallStatus}`;
+      dot.style.background = STATUS_DOT_COLOR[overallStatus];
+      text.textContent = overallStatus === 'operational' ? 'All Systems Operational'
+        : overallStatus === 'degraded' ? 'Partial Service Disruption'
+        : overallStatus === 'outage' ? 'Major Outage Detected'
+        : 'Checking systems...';
+
+      // Updated time
+      const updatedEl = document.getElementById('last-updated');
+      const latestDetectedAt = services ? Object.values(services).map(s => s.detectedAt).filter(Boolean).sort().pop() : null;
+      if (latestDetectedAt) _lastDetectedAt = latestDetectedAt; // remembered so the ticker below can keep counting up between real checks
+      updatedEl.textContent = _lastDetectedAt ? `Last updated ${timeAgo(_lastDetectedAt)}` : '';
+
+      card.innerHTML = [...keys, ...customKeys].map(key => renderRow(key, services?.[key], SERVICE_META[key] || { name: services?.[key]?.name || key.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), icon: services?.[key]?.icon || '⚠️' })).join('');
+
+      const domainsCard = document.getElementById('domains-card');
+      domainsCard.innerHTML = DOMAIN_META.map(d => renderRow(d.key, services?.[d.key], { name: d.label, icon: d.icon })).join('');
+
+      // Active incidents section
+      const incidents = allKeys
+        .filter(k => services?.[k]?.status && services[k].status !== 'operational')
+        .map(k => ({ key: k, ...services[k], ...(SERVICE_META[k] || DOMAIN_META.find(d => d.key === k) || { name: services?.[k]?.name || k.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), icon: services?.[k]?.icon || '⚠️' }) }));
+
+      const incLabel = document.getElementById('incidents-label');
+      const incCard  = document.getElementById('incidents-card');
+      if (incidents.length) {
+        incLabel.style.display = 'block';
+        incCard.style.display  = 'block';
+        incCard.innerHTML = incidents.map(inc => {
+          const flagBy = inc.flaggedBy === 'ai'
+            ? '<span class="status-flag-pill">🤖 Flagged by flux.ai (Automatic)</span>'
+            : '<span class="status-flag-pill">👨‍💻 Flagged by Developer</span>';
+          const sLabel = inc.status === 'outage' ? 'Outage' : inc.status === 'warning' ? 'Warning' : 'Degraded Performance';
+          return `
+            <div class="incident-item">
+              <div class="incident-title">${inc.icon} ${inc.name} — ${sLabel}</div>
+              <div class="incident-body">${inc.message}</div>
+              <div class="incident-meta">
+                ${flagBy}
+                <span>${inc.detectedAt ? new Date(inc.detectedAt).toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : ''}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        incLabel.style.display = 'none';
+        incCard.style.display  = 'none';
+      }
+    }
+
+    function renderRow(key, svc, meta) {
+      const status = svc?.status || 'checking';
+      meta = meta || { name: key, icon: '⚠️' };
+      const flagBy = svc?.flaggedBy === 'ai'
+        ? '<span class="status-flag-pill">🤖 Flagged by flux.ai (Automatic)</span>'
+        : svc?.flaggedBy === 'dev'
+        ? '<span class="status-flag-pill">👨‍💻 Flagged by Developer</span>'
+        : '';
+      const desc = svc?.message || (status === 'checking' ? 'Waiting for health check data...' : 'No additional information.');
+      const detectedTime = svc?.detectedAt ? `Detected ${timeAgo(svc.detectedAt)} · ${new Date(svc.detectedAt).toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })}` : '';
+
+      return `
+        <div class="status-row">
+          <span class="status-row-icon">${meta.icon}</span>
+          <div class="status-dot ${status}"></div>
+          <div class="status-row-body">
+            <div class="status-row-header">
+              <span class="status-row-name">${meta.name}</span>
+              <span class="status-badge ${status}">${STATUS_LABEL[status] || (status === 'warning' ? '⚠️ Warning' : status)}</span>
+              ${flagBy}
+            </div>
+            <div class="status-row-desc">${desc}</div>
+            ${detectedTime ? `<div class="status-row-time">${detectedTime}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // Live updates via Firestore snapshot — every visitor gets the latest
+    // cached result instantly and for free, no probe needed on their end.
+    onSnapshot(doc(db, 'stats', 'serviceHealth'), snap => {
+      if (snap.exists()) renderServices(snap.data().services);
+    });
+
+    // Refresh button — rate limited to once every 5 minutes per browser,
+    // shared with the automatic on-load check (whichever happens first
+    // starts the cooldown for both).
+    const refreshBtn = document.getElementById('refresh-btn');
+    const refreshIcon = document.getElementById('refresh-icon');
+    let _cooldownTicker = null;
+
+    function updateRefreshButtonState() {
+      const remaining = getRemainingCooldownMs();
+      if (remaining > 0) {
+        refreshBtn.disabled = true;
+        refreshBtn.style.opacity = '0.55';
+        refreshBtn.style.cursor = 'not-allowed';
+        refreshBtn.title = `You can refresh again in ${formatCooldown(remaining)}`;
+        refreshBtn.lastChild.textContent = ` Refresh (${formatCooldown(remaining)})`;
+        if (!_cooldownTicker) {
+          _cooldownTicker = setInterval(() => {
+            if (getRemainingCooldownMs() <= 0) {
+              clearInterval(_cooldownTicker);
+              _cooldownTicker = null;
+            }
+            updateRefreshButtonState();
+          }, 1000);
+        }
+      } else {
+        refreshBtn.disabled = false;
+        refreshBtn.style.opacity = '';
+        refreshBtn.style.cursor = '';
+        refreshBtn.title = '';
+        refreshBtn.lastChild.textContent = ' Refresh';
+        if (_cooldownTicker) { clearInterval(_cooldownTicker); _cooldownTicker = null; }
+      }
+    }
+
+    async function runHealthCheck() {
+      const badge = document.getElementById('bg-check-indicator');
+      if (badge) badge.style.display = 'flex';
+      try {
+        const services = await autoCheckServiceHealth();
+        renderServices(services);
+        markRefreshed();
+        updateRefreshButtonState();
+      } finally {
+        if (badge) badge.style.display = 'none';
+      }
+    }
+
+    refreshBtn.addEventListener('click', async () => {
+      if (getRemainingCooldownMs() > 0) return; // shouldn't happen (button is disabled), but just in case
+      refreshIcon.classList.add('spinning');
+      await runHealthCheck();
+      refreshIcon.classList.remove('spinning');
+    });
+
+    // One check on page load — but only if the cooldown has actually
+    // elapsed. Otherwise we just rely on onSnapshot above for the last
+    // known result, no new probe fired.
+    if (getRemainingCooldownMs() <= 0) {
+      runHealthCheck();
+    }
+    updateRefreshButtonState();
+
+    // Keeps "Last updated Xm ago" counting up in real time even though
+    // actual checks only happen every 5 minutes — otherwise it visibly
+    // freezes at whatever it said the moment the last real check finished.
+    setInterval(() => {
+      const updatedEl = document.getElementById('last-updated');
+      if (updatedEl && _lastDetectedAt) updatedEl.textContent = `Last updated ${timeAgo(_lastDetectedAt)}`;
+    }, 15000);
+  </script>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => { const loader = document.getElementById('global-page-loader'); if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 400); } }, 400);
+  });
+</script>
+</body>
+</html>

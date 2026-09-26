@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>
+    // Dynamic <base> so relative asset paths (style.css, script.js, assets/...)
+    // resolve correctly whether the site is hosted at its own root (Vercel)
+    // or reverse-proxied under a subpath like /Flux (with or without a
+    // trailing slash). Must run before any other resource tag in <head>.
+    (function () {
+      var path = window.location.pathname;
+      var base;
+      var subpathMatch = path.match(/^(\/Flux)(\/|$)/i);
+      if (subpathMatch) {
+        base = subpathMatch[1] + '/';
+      } else {
+        base = path.substring(0, path.lastIndexOf('/') + 1) || '/';
+      }
+      document.write('<base href="' + base + '">');
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile — Flux</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/thumbnail.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Flux">
+  <meta name="theme-color" content="#0f1724">
+  <style>
+    /* ── Profile page ── */
+    .profile-card {
+      background: var(--panel);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      margin-bottom: 20px;
+      overflow: visible;
+      position: relative;
+    }
+    .profile-banner {
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px 24px 0 0;
+    }
+    .profile-banner-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .profile-banner-confetti span {
+      position: absolute;
+      animation: banner-float 3s ease-in-out infinite;
+      font-size: 20px;
+      opacity: 0.8;
+    }
+    @keyframes banner-float {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(12deg); }
+    }
+    .profile-body {
+      padding: 20px 28px 24px;
+    }
+    .profile-top-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .profile-avatar-ring {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      flex-shrink: 0;
+      border: 0;
+      position: relative;
+    }
+    .profile-avatar, .profile-avatar-placeholder {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+    .profile-avatar-placeholder {
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: 30px;
+    }
+    .profile-name-block { flex: 1; min-width: 0; }
+    .profile-displayname {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 34px;
+      color: var(--text);
+      margin: 0 0 2px;
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .profile-username { font-size: 13px; color: var(--muted); margin: 0; }
+    .profile-badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+    .profile-bio { font-size: 14px; color: var(--muted); margin: 0 0 14px; line-height: 1.6; }
+    .profile-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
+    .profile-stats {
+      display: flex;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 14px;
+    }
+    .profile-stat {
+      flex: 1;
+      text-align: center;
+      padding: 0 8px;
+      border-right: 1px solid var(--glass-border);
+    }
+    .profile-stat:last-child { border-right: none; }
+    .profile-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      color: var(--text);
+      display: block;
+      line-height: 1;
+    }
+    .profile-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Sections */
+    .profile-section {
+      background: var(--panel);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .profile-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      color: var(--text);
+      margin: 0 0 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .mini-game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+    }
+    .mini-game-card {
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .mini-game-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .mini-game-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+    .mini-game-card-title { font-size: 11px; font-weight: 600; color: var(--text); padding: 6px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .btn-follow {
+      padding: 9px 22px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.15s;
+    }
+    .btn-follow:hover { opacity: 0.85; transform: scale(1.03); }
+    .btn-follow.following {
+      background: transparent;
+      border: 1.5px solid var(--glass-border);
+      color: var(--muted);
+    }
+    .btn-follow.following:hover { border-color: #ef4444; color: #ef4444; }
+
+    .edit-profile-btn {
+      padding: 9px 16px;
+      background: transparent;
+      border: 1.5px solid var(--glass-border);
+      border-radius: 20px;
+      font-size: 13px; font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .edit-profile-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .private-notice { text-align: center; padding: 40px 20px; color: var(--muted); }
+    .private-notice .lock-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+
+    .profile-loading { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 14px; }
+
+    .not-found { text-align: center; padding: 80px 20px; }
+    .not-found h2 { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--text); margin: 0 0 8px; }
+    .not-found p { color: var(--muted); font-size: 14px; }
+
+    .ban-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #ef4444; color: white;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px;
+    }
+
+    /* Edit modal */
+    .edit-modal-overlay {
+      position: fixed; inset: 0; z-index: 600;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(6px);
+    }
+    .edit-modal-box {
+      background: var(--panel);
+      border-radius: 20px; padding: 28px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+      position: relative; max-height: 90vh; overflow-y: auto;
+    }
+    .input-field {
+      width: 100%; padding: 10px 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: 10px; font-size: 14px;
+      background: var(--bg); color: var(--text);
+      outline: none; box-sizing: border-box; font-family: inherit;
+    }
+    .input-field:focus { border-color: var(--accent); }
+    .field-label {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      display: block; margin-bottom: 4px;
+    }
+
+    /* Admin panel */
+    .ban-panel {
+      background: rgba(239,68,68,0.06);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 12px; padding: 16px; margin-top: 16px;
+    }
+    .ban-panel-title { font-size: 12px; font-weight: 700; color: #ef4444; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Beta badge */
+    .beta-badge {
+      display: inline-flex; align-items: center;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: white; font-size: 9px; font-weight: 800;
+      padding: 2px 7px; border-radius: 20px;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      position: relative; vertical-align: middle;
+    }
+    .beta-badge::before {
+      content: ''; position: absolute; inset: -2px; border-radius: 20px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      opacity: 0.4; animation: beta-pulse 2s ease-in-out infinite; z-index: -1;
+    }
+    @keyframes beta-pulse { 0%,100%{transform:scale(1);opacity:0.4} 50%{transform:scale(1.3);opacity:0} }
+    .beta-nav { display: inline-flex; align-items: center; gap: 5px; }
+
+    @media (max-width: 600px) {
+      .profile-banner { height: 90px; font-size: 36px; }
+      .profile-body { padding: 48px 16px 20px; }
+      .profile-displayname { font-size: 28px; }
+      .mini-game-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9156385751718783" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="global-page-loader" style="position:fixed;inset:0;background:#ffffff;z-index:9999999;display:flex;justify-content:center;align-items:center;transition:opacity 0.4s ease;pointer-events:none;">
+    <img src="assets/loading.gif" style="width:250px;height:auto;" alt="Loading...">
+  </div>
+  <script>
+    // Fast Boot: hide the white loader quickly (best effort)
+    (function(){
+      const hide = () => {
+        try { if (localStorage.getItem('flux_fast_boot') !== '1') return; } catch(e){ return; }
+        const el = document.getElementById('global-page-loader');
+        if (!el) return;
+        el.style.opacity = '0';
+        setTimeout(() => { try { el.remove(); } catch(e){} }, 420);
+      };
+      setTimeout(hide, 80);
+      requestAnimationFrame(hide);
+      window.addEventListener('pageshow', hide, { once: true });
+    })();
+  </script>
+
+  <header class="topbar">
+    <div class="brand">
+      <a href="index.html" class="logo"><img src="assets/logo.png" alt="Flux" style="height:32px;vertical-align:middle;margin-right:6px;"> FLUX</a>
+    </div>
+    <nav class="nav">
+      <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false">☰</button>
+      <ul id="main-nav" class="nav-list">
+        <li data-nav-item="home"><a href="index.html">Home</a></li>
+        <li data-nav-item="games"><a href="games.html">Games</a></li>
+        <li data-nav-item="websites"><a href="websites.html">Websites</a></li>
+        <li data-nav-item="social"><a href="social.html"><span class="beta-nav">Social <span class="beta-badge">Beta</span></span></a></li>
+        <li data-nav-item="info"><a href="info.html">Info</a></li>
+        <li data-nav-item="credits"><a href="credits.html">Credits</a></li>
+        <li data-nav-item="donate"><a href="donate.html" class="accent">Donate</a></li>
+      </ul>
+    </nav>
+    <div class="right-actions">
+      <a class="icon-btn" href="https://github.com/nxtcoreee3/flux" target="_blank" rel="noopener">⭐ Star</a>
+      <a class="cta" href="games.html">Play Now</a>
+    </div>
+  </header>
+
+  <main style="max-width:720px;margin:0 auto;padding:24px 16px;">
+    <div id="profile-root">
+      <div class="profile-loading"><div style="display:flex;justify-content:center;padding:20px;"><img src="assets/loading.gif" style="width:80px;height:auto;" alt="Loading..."></div></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo-small">FLUX</a>
+        <p>Curated links • Hosted games • Built by <a href="https://github.com/nxtcoreee3" target="_blank" rel="noopener">nxtcoreee3</a></p>
+      </div>
+      <div class="footer-links">
+        <a href="games.html">Games</a>
+        <a href="info.html">Info</a>
+        <a href="credits.html">Credits</a>
+        <a href="donate.html">Donate</a>
+      </div>
+      <div class="footer-actions">
+        <a class="star-btn" href="https://github.com/nxtcoreee3/flux" target="_blank" rel="noopener">⭐ Star this project</a>
+        <a class="coffee-btn" href="https://ko-fi.com/nxtcoreee3" target="_blank" rel="noopener">☕ Buy us a coffee</a>
+      </div>
+    </div>
+    <small class="copyright">Flux © <span id="year"></span> · All rights reserved</small>
+  </footer>
+
+  <script type="module" src="profile.js"></script>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => { const loader = document.getElementById('global-page-loader'); if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 400); } }, 400);
+  });
+</script>
+</body>
+</html>

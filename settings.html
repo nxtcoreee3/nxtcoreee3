@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>
+    // Dynamic <base> so relative asset paths (style.css, script.js, assets/...)
+    // resolve correctly whether the site is hosted at its own root (Vercel)
+    // or reverse-proxied under a subpath like /Flux (with or without a
+    // trailing slash). Must run before any other resource tag in <head>.
+    (function () {
+      var path = window.location.pathname;
+      var base;
+      var subpathMatch = path.match(/^(\/Flux)(\/|$)/i);
+      if (subpathMatch) {
+        base = subpathMatch[1] + '/';
+      } else {
+        base = path.substring(0, path.lastIndexOf('/') + 1) || '/';
+      }
+      document.write('<base href="' + base + '">');
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Settings — Flux</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    (function() {
+      try {
+        if (localStorage.getItem('flux_dark') === '1' ||
+            (localStorage.getItem('flux_dark') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+        if (localStorage.getItem('flux_beta') === '1') {
+          document.documentElement.classList.add('beta');
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <style>
+    .settings-page { max-width: 680px; margin: 32px auto; padding: 0 20px 60px; }
+    .settings-back { display:inline-flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:24px;padding:6px 0;transition:color 0.15s; }
+    .settings-back:hover { color:var(--accent); }
+    .settings-title { font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--text);margin:0 0 6px; }
+    .settings-sub { font-size:13px;color:var(--muted);margin:0 0 32px; }
+    .settings-section { margin-bottom:28px; }
+    .settings-section-label { font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px; }
+    .settings-card { background:var(--panel);border:1px solid var(--glass-border);border-radius:14px;overflow:hidden; }
+    .settings-row { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--glass-border);transition:background 0.1s; }
+    .settings-row:last-child { border-bottom:none; }
+    .settings-row:hover { background:rgba(58,125,255,0.03); }
+    .settings-row-left { display:flex;align-items:center;gap:12px; }
+    .settings-row-icon { font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:9px;flex-shrink:0; }
+    .settings-row-text { }
+    .settings-row-label { font-size:14px;font-weight:600;color:var(--text); }
+    .settings-row-desc { font-size:12px;color:var(--muted);margin-top:1px; }
+    .settings-btn { background:none;border:1px solid var(--glass-border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:all 0.15s;font-family:inherit; }
+    .settings-btn:hover { background:rgba(58,125,255,0.07);border-color:rgba(58,125,255,0.3);color:var(--accent); }
+    .settings-btn.danger { color:#ef4444;border-color:rgba(239,68,68,0.2); }
+    .settings-btn.danger:hover { background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.4); }
+    .settings-btn.primary { background:var(--accent);color:white;border-color:var(--accent); }
+    .settings-btn.primary:hover { opacity:0.88; }
+    /* Toggle switch */
+    .toggle-wrap { position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0; }
+    .toggle-wrap input { opacity:0;width:0;height:0;position:absolute; }
+    .toggle-track { position:absolute;inset:0;background:#d1d5db;border-radius:12px;transition:background 0.2s;cursor:pointer; }
+    .toggle-thumb { position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);pointer-events:none; }
+    input:checked + .toggle-track { background:var(--accent); }
+    input:checked ~ .toggle-thumb { transform:translateX(20px); }
+    /* Beta badge in settings */
+    .beta-pill { display:inline-flex;align-items:center;background:linear-gradient(135deg,#7c6aff,#a855f7);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase;margin-left:8px; }
+    /* Password inputs */
+    .settings-input { width:100%;padding:10px 12px;border:1px solid var(--glass-border);border-radius:10px;font-size:14px;outline:none;box-sizing:border-box;background:var(--bg,#f9fafb);color:var(--text);font-family:inherit;transition:border-color 0.15s; }
+    .settings-input:focus { border-color:var(--accent);box-shadow:0 0 0 3px rgba(58,125,255,0.1); }
+    .settings-expandable { display:none;padding:14px 18px;border-top:1px solid var(--glass-border);background:var(--bg,#f9fafb); }
+    .settings-expandable.open { display:block; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9156385751718783" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="global-page-loader" style="position:fixed;inset:0;background:#ffffff;z-index:9999999;display:flex;justify-content:center;align-items:center;transition:opacity 0.4s ease;pointer-events:none;">
+    <img src="assets/loading.gif" style="width:250px;height:auto;" alt="Loading...">
+  </div>
+  <script>
+    // Fast Boot: hide the white loader quickly (best effort)
+    (function(){
+      const hide = () => {
+        try { if (localStorage.getItem('flux_fast_boot') !== '1') return; } catch(e){ return; }
+        const el = document.getElementById('global-page-loader');
+        if (!el) return;
+        el.style.opacity = '0';
+        setTimeout(() => { try { el.remove(); } catch(e){} }, 420);
+      };
+      setTimeout(hide, 80);
+      requestAnimationFrame(hide);
+      window.addEventListener('pageshow', hide, { once: true });
+    })();
+  </script>
+
+  <header class="topbar">
+    <div class="brand">
+      <a href="index.html" class="logo"><img src="assets/logo.png" alt="Flux" style="height:32px;vertical-align:middle;margin-right:6px;"> FLUX</a>
+    </div>
+    <nav class="nav" id="main-nav">
+      <ul class="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="games.html">Games</a></li>
+        <li><a href="social.html">Social</a></li>
+        <li><a href="info.html">Info</a></li>
+        <li><a href="credits.html">Credits</a></li>
+        <li><a href="donate.html">Donate</a></li>
+      </ul>
+    </nav>
+    <div class="right-actions" id="right-actions"></div>
+  </header>
+
+  <main class="settings-page">
+    <a href="javascript:history.back()" class="settings-back">← Back</a>
+    <h1 class="settings-title">Settings</h1>
+    <p class="settings-sub">Manage your account, appearance, and preferences.</p>
+
+    <!-- GAME SERVERS -->
+    <div class="settings-section" id="game-servers-section">
+      <div class="settings-section-label">Game Servers</div>
+      <div class="settings-card">
+        <div class="settings-row" style="align-items:flex-start;">
+          <div class="settings-row-left" style="align-items:flex-start;">
+            <div class="settings-row-icon" style="background:rgba(58,125,255,0.1);">🛰️</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Active Game Server</div>
+              <div class="settings-row-desc">Choose which game-provider category Flux displays. All Game Providers combines Flux Cloud, Local Library, and available External Cloud Gaming catalogs.</div>
+            </div>
+          </div>
+          <span id="active-server-settings-label" style="font-size:12px;font-weight:800;color:var(--accent);white-space:nowrap;padding-top:8px;">Flux Cloud</span>
+        </div>
+        <div style="padding:12px 18px;background:rgba(168,85,247,0.06);font-size:11px;color:var(--muted);line-height:1.55;border-bottom:1px solid var(--glass-border);">External Cloud Gaming is opt-in and presents one combined catalog from available external providers. All Game Providers also includes Flux Cloud and Local Library games.</div>
+        <div id="provider-blacklist-settings" style="padding:14px 18px;border-bottom:1px solid var(--glass-border);"></div>
+        <div id="server-profiles-settings" style="display:flex;flex-direction:column;gap:8px;padding:14px 18px;border-bottom:1px solid var(--glass-border);"></div>
+        <div class="settings-row" style="align-items:flex-start;">
+          <div class="settings-row-left" style="align-items:flex-start;">
+            <div class="settings-row-icon" style="background:rgba(34,197,94,0.1);">📁</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Repository Game Library</div>
+              <div class="settings-row-desc" id="local-library-status">Games are read directly from the repository’s /games folder.</div>
+            </div>
+          </div>
+          <span style="font-size:11px;font-weight:800;color:#16a34a;white-space:nowrap;padding-top:8px;">Repo linked</span>
+        </div>
+        <div style="padding:12px 18px;background:rgba(58,125,255,0.035);font-size:11px;color:var(--muted);line-height:1.55;">
+          Local Library expects each game at <strong style="color:var(--text);">/games/&lt;exact-game-name&gt;/index.html</strong> (or <code>index.htm</code>). The Games page checks these repository paths automatically. Switching servers applies immediately and is saved in this browser.
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT -->
+    <div class="settings-section">
+      <div class="settings-section-label">Account</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(58,125,255,0.1);">👤</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">My Profile</div>
+              <div class="settings-row-desc">View and edit your public profile</div>
+            </div>
+          </div>
+          <a id="settings-profile-link" href="profile.html" class="settings-btn">Open</a>
+        </div>
+        <div class="settings-row" id="pw-row" style="display:none;">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(239,68,68,0.1);">🔑</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Change Password</div>
+              <div class="settings-row-desc">Update your account password</div>
+            </div>
+          </div>
+          <button class="settings-btn" id="pw-expand-btn">Change</button>
+        </div>
+        <div class="settings-expandable" id="pw-expand">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <input type="password" id="pw-new" placeholder="New password" class="settings-input">
+            <input type="password" id="pw-confirm" placeholder="Confirm new password" class="settings-input">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button id="pw-save" class="settings-btn primary">Save Password</button>
+              <span id="pw-msg" style="font-size:12px;display:none;"></span>
+            </div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(34,197,94,0.1);">💬</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Social & Chat</div>
+              <div class="settings-row-desc">See who's online, chat, follow friends</div>
+            </div>
+          </div>
+          <a href="social.html" class="settings-btn">Open</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(168,85,247,0.1);">💌</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Messages</div>
+              <div class="settings-row-desc">Direct messages and group chats</div>
+            </div>
+          </div>
+          <a href="messages.html" class="settings-btn">Open</a>
+        </div>
+        <div class="settings-row" id="signout-row" style="display:none;">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(239,68,68,0.1);">🚪</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Sign Out</div>
+              <div class="settings-row-desc">Sign out of your Flux account</div>
+            </div>
+          </div>
+          <button class="settings-btn danger" id="settings-signout-btn">Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPEARANCE -->
+    <div class="settings-section">
+      <div class="settings-section-label">Appearance</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(0,0,0,0.06);" id="dark-icon-wrap">🌙</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Dark Mode</div>
+              <div class="settings-row-desc">Switch between light and dark theme</div>
+            </div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="dark-toggle-settings">
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:linear-gradient(135deg,rgba(124,106,255,0.15),rgba(168,85,247,0.1));">🧪</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Beta UI <span class="beta-pill" id="beta-pill" style="display:none;">ON</span></div>
+              <div class="settings-row-desc">Revolutionary new look — experimental</div>
+            </div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="beta-toggle-settings">
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="settings-section">
+      <div class="settings-section-label">Notifications</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(58,125,255,0.1);">💬</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Message notifications</div>
+              <div class="settings-row-desc">Show pop-ups for new direct messages. Unread counts stay visible.</div>
+            </div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="message-notifications-toggle">
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(245,158,11,0.13);">⚠️</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Status notifications</div>
+              <div class="settings-row-desc">Show service incident and availability alerts.</div>
+            </div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="status-notifications-toggle">
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="settings-row" style="background:rgba(58,125,255,0.035);">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(58,125,255,0.1);">📣</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Admin broadcasts</div>
+              <div class="settings-row-desc">Always shown and cannot be muted here.</div>
+            </div>
+          </div>
+          <span style="font-size:11px;font-weight:700;color:var(--accent);">Always on</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TUTORIAL & HELP -->
+    <div class="settings-section">
+      <div class="settings-section-label">Help</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(251,191,36,0.12);">🎓</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Tutorial</div>
+              <div class="settings-row-desc">Replay the getting-started tour</div>
+            </div>
+          </div>
+          <button class="settings-btn" id="tutorial-settings-btn">Start</button>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(58,125,255,0.1);">🔒</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Privacy Policy</div>
+              <div class="settings-row-desc">How Flux handles your data</div>
+            </div>
+          </div>
+          <a href="privacypolicy.html" class="settings-btn">Read</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(34,197,94,0.1);">⭐</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Credits</div>
+              <div class="settings-row-desc">The people who made Flux</div>
+            </div>
+          </div>
+          <a href="credits.html" class="settings-btn">View</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- KILL SWITCH -->
+    <div class="settings-section">
+      <div class="settings-section-label">Kill Switch</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(239,68,68,0.1);">⚡</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Enable Kill Switch</div>
+              <div class="settings-row-desc">Show the ⚡ Kill button in the nav and game bar</div>
+            </div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="kill-switch-toggle">
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="settings-row" id="kill-switch-dest-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(239,68,68,0.08);">🎯</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Escape Destination</div>
+              <div class="settings-row-desc" id="kill-switch-current-dest">Loading...</div>
+            </div>
+          </div>
+          <button class="settings-btn" id="kill-switch-configure-btn" style="color:#ef4444;border-color:rgba(239,68,68,0.25);">Configure</button>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(239,68,68,0.08);">⌨️</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Keyboard Shortcut</div>
+              <div class="settings-row-desc"><kbd style="background:var(--bg);border:1px solid var(--glass-border);border-radius:4px;padding:1px 6px;font-size:11px;font-family:monospace;">Shift</kbd> + <kbd style="background:var(--bg);border:1px solid var(--glass-border);border-radius:4px;padding:1px 6px;font-size:11px;font-family:monospace;">Esc</kbd> triggers Kill Switch instantly</div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(239,68,68,0.08);">🖐️</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Return to Game</div>
+              <div class="settings-row-desc">Tap 5× quickly on the screen to close the Kill overlay</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Configure panel -->
+      <div id="kill-switch-config-panel" style="display:none;margin-top:8px;background:var(--panel);border:1px solid var(--glass-border);border-radius:14px;overflow:hidden;">
+        <div style="padding:16px 18px;border-bottom:1px solid var(--glass-border);font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Choose your escape destination</div>
+        <div id="kill-switch-presets-settings" style="display:flex;flex-direction:column;max-height:280px;overflow-y:auto;"></div>
+        <div id="kill-custom-settings-wrap" style="display:none;padding:14px 18px;border-top:1px solid var(--glass-border);">
+          <label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:6px;">Custom website URL</label>
+          <input id="kill-custom-settings-input" type="text" placeholder="e.g. https://example.com" class="settings-input">
+        </div>
+        <div style="padding:14px 18px;border-top:1px solid var(--glass-border);display:flex;gap:8px;">
+          <button id="kill-save-settings-btn" class="settings-btn primary" style="background:linear-gradient(135deg,#ef4444,#dc2626);border-color:#dc2626;">Save Destination</button>
+          <button id="kill-cancel-settings-btn" class="settings-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="settings-section">
+      <div class="settings-section-label">Navigation</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:rgba(58,125,255,0.08);">🧭</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Customize Nav Bar</div>
+              <div class="settings-row-desc">Choose which tabs show up in the top navigation</div>
+            </div>
+          </div>
+          <button class="settings-btn" id="nav-expand-btn">Edit</button>
+        </div>
+        <div class="settings-expandable" id="nav-expand">
+          <div id="nav-prefs-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap;">
+            <button class="settings-btn primary" id="nav-save-btn">Save</button>
+            <button class="settings-btn" id="nav-reset-btn">Reset</button>
+            <span id="nav-msg" style="font-size:12px;display:none;"></span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5;">
+            Changes apply instantly on pages you open next. Reload an already-open page to refresh the nav.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PURCHASES -->
+    <div class="settings-section" id="purchase-management-section">
+      <div class="settings-section-label">Purchase Management</div>
+      <div class="settings-card">
+        <div class="settings-row" style="align-items:flex-start;">
+          <div class="settings-row-left" style="align-items:flex-start;">
+            <div class="settings-row-icon" style="background:rgba(245,158,11,0.12);">↩️</div>
+            <div class="settings-row-text">
+              <div class="settings-row-label">Revert game purchases</div>
+              <div class="settings-row-desc">Select eligible games to return their Flux points and remove access.</div>
+            </div>
+          </div>
+          <button class="settings-btn danger" id="revert-all-purchases-btn" disabled>Revert all eligible</button>
+        </div>
+        <div id="purchase-history-list" style="padding:6px 18px 10px;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px;border-top:1px solid var(--glass-border);">
+          <button class="settings-btn" id="select-all-purchases-btn" disabled>Select all eligible</button>
+          <button class="settings-btn danger" id="revert-selected-purchases-btn" disabled>Revert selected</button>
+        </div>
+        <div style="padding:13px 18px;background:rgba(245,158,11,0.055);font-size:11px;color:var(--muted);line-height:1.55;">
+          <strong style="color:var(--text);">Reversal policy:</strong> only games purchased within the last <strong style="color:var(--text);">7 days</strong> are eligible. Reverting a purchase returns <strong style="color:var(--text);">Flux points only</strong> and removes that game from your unlocked list. Flux points are virtual in-game currency and <strong style="color:var(--text);">cannot be exchanged for real money</strong>; this is not a cash refund.
+        </div>
+        <div id="purchase-management-message" role="status" style="display:none;padding:10px 18px;font-size:12px;"></div>
+      </div>
+    </div>
+
+    <!-- NOT SIGNED IN state -->
+    <div id="not-signed-in" style="display:none;text-align:center;padding:40px 20px;background:var(--panel);border-radius:14px;border:1px solid var(--glass-border);">
+      <div style="font-size:40px;margin-bottom:12px;">🔐</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text);margin-bottom:8px;">Sign in to access all settings</div>
+      <div style="font-size:13px;color:var(--muted);">Some settings are only available when you're signed in.</div>
+    </div>
+  </main>
+
+  <script type="module" src="settings-server-ui.js"></script>
+  <script type="module" src="settings-tutorial.js"></script>
+  <script type="module" src="settings-purchases.js"></script>
+  <script type="module">
+    import { initAuthUI, initDarkMode, initBetaShell, initPresence, trackDailyVisitor, initServerStatus, initBroadcast, initChaos, initJumpscare, initCookieConsent, logOut, getNotificationPreferences, setNotificationPreference } from './firebase-auth.js';
+
+    initDarkMode();
+    initCookieConsent();
+    initPresence();
+    trackDailyVisitor();
+    initServerStatus();
+    initBroadcast();
+    initChaos();
+    initJumpscare();
+
+    // Dark mode toggle
+    const darkToggle = document.getElementById('dark-toggle-settings');
+    const darkIconWrap = document.getElementById('dark-icon-wrap');
+    const isDark = document.documentElement.classList.contains('dark');
+    darkToggle.checked = isDark;
+    darkIconWrap.textContent = isDark ? '☀️' : '🌙';
+
+    // Sync toggle thumb
+    if (isDark) {
+      darkToggle.nextElementSibling.style.background = 'var(--accent)';
+    }
+
+    darkToggle.addEventListener('change', () => {
+      const on = darkToggle.checked;
+      document.documentElement.classList.toggle('dark', on);
+      localStorage.setItem('flux_dark', on ? '1' : '0');
+      darkIconWrap.textContent = on ? '☀️' : '🌙';
+    });
+
+    // Beta toggle
+    const betaToggle = document.getElementById('beta-toggle-settings');
+    const betaPill = document.getElementById('beta-pill');
+    const isBeta = document.documentElement.classList.contains('beta');
+    betaToggle.checked = isBeta;
+    if (isBeta) betaPill.style.display = 'inline-flex';
+
+    betaToggle.addEventListener('change', async () => {
+      const on = betaToggle.checked;
+      document.documentElement.classList.toggle('beta', on);
+      localStorage.setItem('flux_beta', on ? '1' : '0');
+      betaPill.style.display = on ? 'inline-flex' : 'none';
+      initBetaShell();
+      // Persist to Firestore
+      try {
+        const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const { getAuth } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+        const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+        const user = getAuth(getApp()).currentUser;
+        if (user && !user.isAnonymous) {
+          await updateDoc(doc(getFirestore(getApp()), 'profiles', user.uid), { betaMode: on });
+        }
+      } catch {}
+      // Toast
+      const t = document.createElement('div');
+      t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;background:${on ? 'linear-gradient(135deg,#7c6aff,#a855f7)' : '#1a1d27'};color:white;padding:12px 22px;border-radius:20px;font-size:13px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,0.3);pointer-events:none;opacity:0;transition:opacity 0.2s;`;
+      t.textContent = on ? '🧪 Beta UI activated!' : '✓ Returned to classic UI';
+      document.body.appendChild(t);
+      requestAnimationFrame(() => t.style.opacity = '1');
+      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 200); }, 2500);
+    });
+
+    // Notification preferences are local to this browser. Admin broadcasts are deliberately not configurable.
+    const notificationPrefs = getNotificationPreferences();
+    const messageNotificationsToggle = document.getElementById('message-notifications-toggle');
+    const statusNotificationsToggle = document.getElementById('status-notifications-toggle');
+    messageNotificationsToggle.checked = notificationPrefs.messages;
+    statusNotificationsToggle.checked = notificationPrefs.status;
+    messageNotificationsToggle.addEventListener('change', () => setNotificationPreference('messages', messageNotificationsToggle.checked));
+    statusNotificationsToggle.addEventListener('change', () => setNotificationPreference('status', statusNotificationsToggle.checked));
+
+    // Tutorial
+    document.getElementById('tutorial-settings-btn').addEventListener('click', () => {
+      if (typeof window.startFluxTutorial === 'function') window.startFluxTutorial();
+      else import('./settings-tutorial.js').then(({ startSettingsTutorial }) => startSettingsTutorial?.());
+    });
+
+    // Password change
+    const pwRow = document.getElementById('pw-row');
+    const pwExpand = document.getElementById('pw-expand');
+    document.getElementById('pw-expand-btn').addEventListener('click', () => {
+      pwExpand.classList.toggle('open');
+    });
+    document.getElementById('pw-save').addEventListener('click', async () => {
+      const { getAuth, updatePassword } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+      const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const newPw = document.getElementById('pw-new').value;
+      const confirmPw = document.getElementById('pw-confirm').value;
+      const msg = document.getElementById('pw-msg');
+      msg.style.display = 'block';
+      if (newPw !== confirmPw) { msg.style.color = '#ef4444'; msg.textContent = 'Passwords do not match.'; return; }
+      if (newPw.length < 6) { msg.style.color = '#ef4444'; msg.textContent = 'Must be at least 6 characters.'; return; }
+      try {
+        await updatePassword(getAuth(getApp()).currentUser, newPw);
+        msg.style.color = '#22c55e'; msg.textContent = '✓ Password updated!';
+        setTimeout(() => { pwExpand.classList.remove('open'); msg.style.display = 'none'; }, 1500);
+      } catch(err) {
+        msg.style.color = '#ef4444';
+        msg.textContent = err.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim();
+      }
+    });
+
+    // Sign out
+    document.getElementById('settings-signout-btn').addEventListener('click', async () => {
+      await logOut();
+      window.location.href = 'index.html';
+    });
+
+    // Auth UI (show/hide account-specific rows)
+    initAuthUI(async (user) => {
+      window.loadPurchaseManagement?.(user);
+      if (user && !user.isAnonymous) {
+        document.getElementById('signout-row').style.display = 'flex';
+        document.getElementById('pw-row').style.display = 'flex';
+        // Update profile link
+        try {
+          const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+          const snap = await getDoc(doc(getFirestore(getApp()), 'profiles', user.uid));
+          if (snap.exists()) {
+            document.getElementById('settings-profile-link').href = `profile.html?user=${snap.data().username}`;
+            // Sync beta from Firestore
+            const betaOn = snap.data().betaMode || false;
+            document.documentElement.classList.toggle('beta', betaOn);
+            localStorage.setItem('flux_beta', betaOn ? '1' : '0');
+            initBetaShell();
+            betaToggle.checked = betaOn;
+            betaPill.style.display = betaOn ? 'inline-flex' : 'none';
+          }
+        } catch {}
+      } else if (user && user.isAnonymous) {
+        document.getElementById('signout-row').style.display = 'flex';
+      }
+    });
+
+    /* ── Kill Switch Settings ── */
+    const KILL_KEY = 'flux_kill_switch';
+    const KILL_ENABLED_KEY = 'flux_kill_switch_enabled';
+    const KILL_PRESETS = [
+      { label: '📊 Google Sheets', value: 'https://docs.google.com/spreadsheets/', type: 'web' },
+      { label: '🔍 Google', value: 'https://www.google.com', type: 'web' },
+      { label: '📰 BBC News', value: 'https://www.bbc.co.uk/news', type: 'web' },
+      { label: '📧 Gmail', value: 'https://mail.google.com', type: 'web' },
+      { label: '📅 Google Calendar', value: 'https://calendar.google.com', type: 'web' },
+      { label: '📄 Google Docs', value: 'https://docs.google.com/document/', type: 'web' },
+      { label: '🔧 Custom…', value: 'custom', type: 'custom' },
+    ];
+
+    function getKillCfg() {
+      try { return JSON.parse(localStorage.getItem(KILL_KEY)) || { value: 'https://www.google.com', label: '🔍 Google', custom: '' }; }
+      catch { return { value: 'https://www.google.com', label: '🔍 Google', custom: '' }; }
+    }
+    function isKillEnabled() { return localStorage.getItem(KILL_ENABLED_KEY) === '1'; }
+
+    const killToggle = document.getElementById('kill-switch-toggle');
+    const killDestRow = document.getElementById('kill-switch-dest-row');
+    const killCurrentDest = document.getElementById('kill-switch-current-dest');
+    const killConfigPanel = document.getElementById('kill-switch-config-panel');
+    const killPresetsEl = document.getElementById('kill-switch-presets-settings');
+    const killCustomWrap = document.getElementById('kill-custom-settings-wrap');
+    const killCustomInput = document.getElementById('kill-custom-settings-input');
+
+    // Init state
+    killToggle.checked = isKillEnabled();
+    killDestRow.style.display = isKillEnabled() ? 'flex' : 'none';
+    function updateDestLabel() {
+      const cfg = getKillCfg();
+      killCurrentDest.textContent = cfg.value === 'custom' ? (cfg.custom || 'Not set') : cfg.label;
+    }
+    updateDestLabel();
+
+    killToggle.addEventListener('change', () => {
+      const on = killToggle.checked;
+      localStorage.setItem(KILL_ENABLED_KEY, on ? '1' : '0');
+      killDestRow.style.display = on ? 'flex' : 'none';
+      if (!on) killConfigPanel.style.display = 'none';
+    });
+
+    // Build presets list
+    function buildPresetsUI() {
+      const cfg = getKillCfg();
+      killPresetsEl.innerHTML = KILL_PRESETS.map(p => `
+        <div class="kill-setting-opt settings-row" data-value="${p.value}" data-label="${p.label}" data-type="${p.type}"
+          style="cursor:pointer;${cfg.value === p.value ? 'background:rgba(239,68,68,0.06);' : ''}">
+          <div class="settings-row-left" style="pointer-events:none;">
+            <div style="width:8px;height:8px;border-radius:50%;background:${cfg.value === p.value ? '#ef4444' : 'var(--glass-border)'};flex-shrink:0;margin-right:4px;"></div>
+            <div class="settings-row-text">
+              <div class="settings-row-label" style="font-size:13px;${cfg.value === p.value ? 'color:#ef4444;' : ''}">${p.label}</div>
+            </div>
+          </div>
+          ${p.type !== 'custom' ? `<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(34,197,94,0.12);color:#16a34a;">Web</span>` : ''}
+        </div>
+      `).join('');
+
+      killCustomWrap.style.display = cfg.value === 'custom' ? 'block' : 'none';
+      killCustomInput.value = cfg.custom || '';
+
+      killPresetsEl.querySelectorAll('.kill-setting-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+          killPresetsEl.querySelectorAll('.kill-setting-opt').forEach(o => {
+            o.style.background = '';
+            o.querySelector('.settings-row-label').style.color = '';
+            o.querySelector('[style*="border-radius:50%"]').style.background = 'var(--glass-border)';
+          });
+          opt.style.background = 'rgba(239,68,68,0.06)';
+          opt.querySelector('.settings-row-label').style.color = '#ef4444';
+          opt.querySelector('[style*="border-radius:50%"]').style.background = '#ef4444';
+          killCustomWrap.style.display = opt.dataset.type === 'custom' ? 'block' : 'none';
+        });
+      });
+    }
+
+    document.getElementById('kill-switch-configure-btn').addEventListener('click', () => {
+      const isOpen = killConfigPanel.style.display !== 'none';
+      killConfigPanel.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) buildPresetsUI();
+    });
+
+    document.getElementById('kill-save-settings-btn').addEventListener('click', () => {
+      const selected = killPresetsEl.querySelector('.kill-setting-opt[style*="rgba(239,68,68,0.06)"]');
+      if (!selected) return;
+      const val = selected.dataset.value;
+      const label = selected.dataset.label;
+      const custom = killCustomInput.value.trim();
+      if (val === 'custom' && !custom) {
+        killCustomInput.style.borderColor = '#ef4444';
+        killCustomInput.focus();
+        return;
+      }
+      if (val === 'custom') {
+        try {
+          const u = new URL(custom, window.location.href);
+          if (!(u.protocol === 'http:' || u.protocol === 'https:')) throw new Error('bad proto');
+        } catch {
+          killCustomInput.style.borderColor = '#ef4444';
+          killCustomInput.focus();
+          return;
+        }
+      }
+      localStorage.setItem(KILL_KEY, JSON.stringify({ value: val, label, custom }));
+      killConfigPanel.style.display = 'none';
+      updateDestLabel();
+      // Toast
+      const t = document.createElement('div');
+      t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;background:linear-gradient(135deg,#ef4444,#dc2626);color:white;padding:12px 22px;border-radius:20px;font-size:13px;font-weight:700;box-shadow:0 8px 30px rgba(239,68,68,0.35);pointer-events:none;opacity:0;transition:opacity 0.2s;';
+      t.textContent = `⚡ Kill Switch → ${val === 'custom' ? custom : label}`;
+      document.body.appendChild(t);
+      requestAnimationFrame(() => t.style.opacity = '1');
+      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 200); }, 2500);
+    });
+
+    document.getElementById('kill-cancel-settings-btn').addEventListener('click', () => {
+      killConfigPanel.style.display = 'none';
+    });
+
+    /* ── Navigation Preferences ── */
+    const NAV_KEY = 'flux_nav_prefs';
+    const NAV_DEFAULTS = {
+      home: true,
+      games: true,
+      websites: true,
+      social: true,
+      messages: true,
+      info: true,
+      credits: true,
+      donate: true,
+    };
+    const NAV_LABELS = [
+      { key: 'home', label: 'Home' },
+      { key: 'games', label: 'Games' },
+      { key: 'websites', label: 'Websites' },
+      { key: 'social', label: 'Social' },
+      { key: 'messages', label: 'Messages' },
+      { key: 'info', label: 'Info' },
+      { key: 'credits', label: 'Credits' },
+      { key: 'donate', label: 'Donate' },
+    ];
+
+    const navExpandBtn = document.getElementById('nav-expand-btn');
+    const navExpand = document.getElementById('nav-expand');
+    const navPrefsList = document.getElementById('nav-prefs-list');
+    const navMsg = document.getElementById('nav-msg');
+
+    function loadNavPrefs() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(NAV_KEY));
+        if (!raw || typeof raw !== 'object') return { ...NAV_DEFAULTS };
+        return { ...NAV_DEFAULTS, ...raw };
+      } catch {
+        return { ...NAV_DEFAULTS };
+      }
+    }
+
+    function renderNavPrefs() {
+      const prefs = loadNavPrefs();
+      navPrefsList.innerHTML = NAV_LABELS.map(({ key, label }) => `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--glass-border);border-radius:12px;background:var(--bg,#f9fafb);">
+          <div style="font-size:13px;font-weight:700;color:var(--text);">${label}</div>
+          <label class="toggle-wrap" style="margin:0;">
+            <input type="checkbox" data-nav-key="${key}" ${prefs[key] !== false ? 'checked' : ''}>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+      `).join('');
+    }
+
+    navExpandBtn?.addEventListener('click', () => {
+      const open = navExpand.classList.toggle('open');
+      if (open) renderNavPrefs();
+    });
+
+    document.getElementById('nav-save-btn')?.addEventListener('click', () => {
+      const prefs = loadNavPrefs();
+      navPrefsList.querySelectorAll('input[data-nav-key]').forEach(inp => {
+        const key = inp.getAttribute('data-nav-key');
+        prefs[key] = inp.checked;
+      });
+      localStorage.setItem(NAV_KEY, JSON.stringify(prefs));
+      navMsg.style.display = 'inline';
+      navMsg.style.color = '#22c55e';
+      navMsg.textContent = '✓ Saved';
+      setTimeout(() => { navMsg.style.display = 'none'; }, 1600);
+    });
+
+    document.getElementById('nav-reset-btn')?.addEventListener('click', () => {
+      localStorage.removeItem(NAV_KEY);
+      renderNavPrefs();
+      navMsg.style.display = 'inline';
+      navMsg.style.color = '#22c55e';
+      navMsg.textContent = '✓ Reset';
+      setTimeout(() => { navMsg.style.display = 'none'; }, 1600);
+    });
+
+  </script>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => { const loader = document.getElementById('global-page-loader'); if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 400); } }, 400);
+  });
+</script>
+</body>
+</html>
