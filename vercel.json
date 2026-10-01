@@ -60,6 +60,17 @@
       "source": "/Larp4JB",
       "destination": "/Larp4jb.html",
       "permanent": false
+    },
+      {
+      "source": "/Sprite",
+      "destination": "/sprite.html",
+      "permanent": false
+    },
+     }
+      {
+      "source": "/sprite",
+      "destination": "/sprite.html",
+      "permanent": false
     }
   ],
   "rewrites": [
