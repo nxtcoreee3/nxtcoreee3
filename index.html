@@ -43,6 +43,11 @@
     .fine-footer { display:flex; justify-content:space-between; gap:8px; margin-top:4px; padding:6px 1px 0; border-top:1px solid var(--line); color:white; font-size:10px; text-shadow:0 1px 3px #12394d; }.fine-footer a { color:white; }
     .sound-toggle { display:inline-flex; align-items:center; gap:5px; min-height:40px; color:white; font-size:10px; text-shadow:0 1px 3px #12394d; cursor:pointer; }
     .sound-toggle input { width:16px; height:16px; margin:0; accent-color:#9ce9f3; }
+    .music-btn { position:fixed; bottom:18px; right:16px; z-index:50; display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid rgba(255,255,255,.75); border-radius:999px; background:rgba(5,72,101,.85); color:#fff; font:bold 11px/1 Tahoma,Arial,sans-serif; text-shadow:0 1px 3px #0a2f42; cursor:pointer; backdrop-filter:blur(6px); box-shadow:0 2px 10px rgba(0,0,0,.35); transition:background .15s; }
+    .music-btn:hover,.music-btn:focus-visible { background:rgba(8,100,140,.92); }
+    .music-btn .mb-icon { font-size:14px; line-height:1; }
+    .music-btn.is-playing .mb-icon::before { content:"♪"; }
+    .music-btn:not(.is-playing) .mb-icon::before { content:"♪"; opacity:.45; }
     .airplane { position:fixed; z-index:30; top:16vh; left:0; width:clamp(110px,23vw,210px); height:auto; opacity:0; visibility:hidden; pointer-events:none; }
     .airplane.is-flying { visibility:visible; animation:airplane-cross 10s linear forwards; }
     @keyframes airplane-cross { 0% { transform:translate(-110%,-2px) rotate(-3deg); opacity:0; } 7% { opacity:1; } 48% { transform:translate(47vw,-20px) rotate(-1deg); opacity:1; } 92% { opacity:1; } 100% { transform:translate(112vw,-5px) rotate(1deg); opacity:0; } }
@@ -160,6 +165,8 @@
     <footer class="fine-footer"><span>© 2026 nxtcoreee3</span><label class="sound-toggle"><input id="disable-sound" type="checkbox"><span>Disable sound</span></label><a href="mailto:help.nxtcoreee3@gmail.com">Get in touch ↗</a></footer>
   </div>
 
+  <button class="music-btn" id="music-btn" type="button" aria-label="Play music"><span class="mb-icon" aria-hidden="true"></span><span class="mb-label">Play music</span></button>
+
   <audio id="site-music" src="sounds/24.%20Mii%20Maker%20-%20Mii%20Editor.mp3" preload="auto" loop></audio>
   <audio id="ui-hover-sound" src="sounds/frutiger-aero-sound.mp3" preload="auto"></audio>
   <img class="airplane" id="airplane-flyby" src="assets/foregrounds/web/airplane.png" alt="" aria-hidden="true">
@@ -196,26 +203,55 @@
       const music = document.getElementById('site-music');
       const hoverSound = document.getElementById('ui-hover-sound');
       const disableToggle = document.getElementById('disable-sound');
+      const musicBtn = document.getElementById('music-btn');
       if (!music || !hoverSound || !disableToggle) return;
       music.loop = true;
       music.volume = 0.22;
       hoverSound.volume = 0.5;
+
       let disabled = false;
       try { disabled = localStorage.getItem('nxtcoreee3-sound-disabled') === 'true'; } catch (_) {}
       disableToggle.checked = disabled;
+
+      const updateBtn = () => {
+        if (!musicBtn) return;
+        const playing = !music.paused;
+        musicBtn.classList.toggle('is-playing', playing);
+        musicBtn.querySelector('.mb-label').textContent = playing ? 'Music on' : 'Play music';
+        musicBtn.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+      };
+
       const startMusic = () => {
         if (disabled || !music.paused) return;
-        const playing = music.play();
-        if (playing?.catch) playing.catch(() => {});
+        music.play().then(updateBtn).catch(() => {});
       };
+
       const playUiSound = () => {
         if (disabled) return;
         startMusic();
         hoverSound.pause();
         hoverSound.currentTime = 0;
-        const playing = hoverSound.play();
-        if (playing?.catch) playing.catch(() => {});
+        hoverSound.play().catch(() => {});
       };
+
+      // Manual music button — always works regardless of disabled flag
+      if (musicBtn) {
+        musicBtn.addEventListener('click', () => {
+          if (music.paused) {
+            disabled = false;
+            disableToggle.checked = false;
+            try { localStorage.setItem('nxtcoreee3-sound-disabled', 'false'); } catch (_) {}
+            music.play().then(updateBtn).catch(() => {});
+          } else {
+            music.pause();
+            updateBtn();
+          }
+        });
+      }
+
+      music.addEventListener('play', updateBtn);
+      music.addEventListener('pause', updateBtn);
+
       let lastSoundAt = 0;
       let lastHoverTarget = null;
       document.addEventListener('pointerover', (event) => {
@@ -240,7 +276,10 @@
         try { localStorage.setItem('nxtcoreee3-sound-disabled', String(disabled)); } catch (_) {}
         if (disabled) { music.pause(); hoverSound.pause(); }
         else startMusic();
+        updateBtn();
       });
+
+      updateBtn();
       startMusic();
     })();
 
