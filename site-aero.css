@@ -1,0 +1,126 @@
+/* Shared early-2000s ocean / glass theme for the site's standalone pages. */
+:root {
+  color-scheme: light;
+  --paper: #e9fbff;
+  --paper-deep: #c7eff6;
+  --ink: #f8feff;
+  --muted: #e0f4f8;
+  --red: #c4f4ff;
+  --blue: #0b6787;
+  --yellow: #82d0e0;
+  --cream: #f3fcff;
+  --line: rgba(255,255,255,.48);
+  --shadow: rgba(0,35,60,.4);
+  --green: #55d79a;
+}
+
+html { min-height:100%; background:#087da8; }
+body {
+  color:#fff !important;
+  background:#087da8 url("assets/asadal_stock_12.jpg") center 35% / cover fixed no-repeat !important;
+  font-family:Tahoma,Arial,sans-serif !important;
+  -webkit-font-smoothing:auto !important;
+}
+body::before {
+  content:"" !important;
+  position:fixed !important;
+  inset:0 !important;
+  z-index:-1 !important;
+  pointer-events:none !important;
+  opacity:1 !important;
+  background:rgba(0,35,62,.43) !important;
+  background-image:none !important;
+  mix-blend-mode:normal !important;
+}
+body::after { content:none !important; }
+a { color:#f3fcff !important; text-underline-offset:2px; }
+:focus-visible { outline:2px solid #fff !important; outline-offset:3px !important; }
+
+.wrap {
+  width:min(100% - 24px,780px) !important;
+  max-width:780px !important;
+  margin:14px auto 22px !important;
+  padding:0 !important;
+}
+.pack,.pack-shell {
+  position:relative !important;
+  overflow:hidden !important;
+  padding:14px !important;
+  border:1px solid rgba(255,255,255,.78) !important;
+  background:rgba(5,72,101,.63) !important;
+  color:#fff !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.22) !important;
+}
+.pack::before,.pack-shell::before {
+  inset:6px !important;
+  border:1px solid rgba(255,255,255,.22) !important;
+}
+:is(.pack,.pack-shell) :is(.top,.brand,.top-note,.kicker,.section-kicker,.eyebrow,.back,.stamp,.subtitle,.copy,.section p,.fact,.fact strong,.fact span,.facts,.credit,.credit a,footer,footer a,.lede,.apps-note-text,.apps-note-text strong,.section-label,.section-label span:last-child,.card-title,.card-desc,.card-author,.file-size,.how-to,.how-to ol,.how-to strong,.api-card,.api-card h2,.api-text,.api-url,.api-note,.api-note code,.field-label,.helper,.helper code,.lookup-message,.lookup-message[data-status="error"],.faq h2,.faq p,.status-tape,.results-title,.results-overline,.empty-results,.api-credit,.api-credit a) {
+  color:#f2fcff !important;
+  text-shadow:0 1px 3px rgba(0,28,48,.78);
+}
+:is(.pack,.pack-shell) :is(.intro,.section,.notice,.warning,.search-card,.apps-note,.how-to,.api-card,.card,.results,.status-tape,.results-head,.count,.fact) {
+  color:#fff !important;
+  border-color:rgba(255,255,255,.52) !important;
+  background:rgba(225,248,252,.13) !important;
+  box-shadow:none !important;
+}
+:is(.pack,.pack-shell) .rule { border-color:rgba(255,255,255,.65) !important; background:repeating-linear-gradient(135deg,transparent 0 5px,rgba(255,255,255,.34) 5px 7px) !important; }
+:is(.pack,.pack-shell) .card-preview { background:rgba(0,28,45,.65) !important; border-color:rgba(255,255,255,.5) !important; }
+:is(.pack,.pack-shell) :is(.device-input,input,textarea) { color:#fff !important; background:rgba(0,35,55,.55) !important; border-color:rgba(255,255,255,.58) !important; }
+:is(.pack,.pack-shell) :is(.device-input,input,textarea)::placeholder { color:#d8f1f6 !important; }
+:is(.pack,.pack-shell) :is(.action,.lookup-button,.download,.btn-download,.btn-app,.version-btn,.copy-button) {
+  border-color:rgba(255,255,255,.7) !important;
+  color:#fff !important;
+  text-shadow:0 1px 2px rgba(0,28,48,.8);
+}
+:is(.pack,.pack-shell) :is(.action.primary,.lookup-button,.download,.btn-download) { background:rgba(7,91,122,.92) !important; }
+:is(.pack,.pack-shell) .btn-app { background:rgba(225,248,252,.14) !important; }
+:is(.pack,.pack-shell) .version-btn[aria-pressed="true"] { background:rgba(255,255,255,.23) !important; color:#fff !important; }
+:is(.pack,.pack-shell) .warning { border-left-color:#9be9f3 !important; }
+:is(.pack,.pack-shell) .results-head { background:rgba(20,113,143,.88) !important; }
+:is(.pack,.pack-shell) .count { background:rgba(255,255,255,.16) !important; }
+:is(.pack,.pack-shell) .brand-mark { background:rgba(255,255,255,.14) !important; border-color:rgba(255,255,255,.8) !important; }
+:is(.pack,.pack-shell) .brand-mark img { border-radius:inherit; }
+:is(.pack,.pack-shell) .app-icon { background:rgba(255,255,255,.14) !important; border-color:rgba(255,255,255,.8) !important; box-shadow:0 2px 6px rgba(0,25,42,.45) !important; }
+:is(.pack,.pack-shell) .api-code { color:#e8fbff !important; background:rgba(0,27,43,.8) !important; border-color:rgba(255,255,255,.35) !important; }
+:is(.pack,.pack-shell) .api-note code,:is(.pack,.pack-shell) .helper code { background:rgba(255,255,255,.16) !important; border-color:rgba(255,255,255,.35) !important; }
+:is(.pack,.pack-shell) .signal,:is(.pack,.pack-shell) .firmware-dot { border-color:#fff !important; }
+
+/* The tiny Larp4JB page has no existing layout wrapper. */
+.site-aero-box {
+  width:min(100%,720px);
+  margin:14px auto;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.78);
+  background:rgba(5,72,101,.63);
+  box-shadow:inset 0 1px rgba(255,255,255,.22);
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,28,48,.78);
+}
+body:has(.site-aero-box) { width:auto !important; max-width:none !important; min-height:100dvh; margin:0 !important; padding:14px !important; }
+.site-aero-box a { color:#f3fcff !important; }
+.site-aero-box img:not(.troll) { border:1px solid rgba(255,255,255,.8); }
+@media (max-width:520px) {
+  .wrap { width:calc(100% - 16px) !important; margin-top:8px !important; }
+  .pack,.pack-shell { padding:11px !important; }
+  .site-aero-box { width:calc(100% - 16px); margin:8px auto; padding:13px; }
+}
+
+/* Sprite remains a full-screen chat app; recolor its surfaces, not its controls or behavior. */
+body:has(#auth) { --bg:#07506b; --panel:rgba(5,72,101,.94); --line:rgba(255,255,255,.28); --tx:#f4fcff; --mut:#d2edf2; --ac:#83dcec; --m1:#39abc4; --m2:#8be1ed; --mt:#073d52; --th:rgba(26,104,129,.85); }
+body:has(#auth) #auth { background:rgba(0,42,60,.28) !important; }
+body:has(#auth) #app { background:transparent !important; }
+body:has(#auth) #side,body:has(#auth) .lab-side,body:has(#auth) .lab-tools { background:rgba(5,72,101,.88) !important; }
+body:has(#auth) #pane,body:has(#auth) .lab-main { background:rgba(5,72,101,.74) !important; }
+body:has(#auth) #head,body:has(#auth) .lab-head { background:rgba(0,55,78,.86) !important; }
+body:has(#auth) .acard { padding:28px !important; border:1px solid rgba(255,255,255,.68) !important; border-radius:2px !important; background:rgba(5,72,101,.82) !important; }
+body:has(#auth) .logo,body:has(#auth) .top h1 { color:#a9eff9 !important; }
+body:has(#auth) .btn { border-radius:2px !important; }
+body:has(#auth) .m { border-radius:8px !important; }
+body:has(#auth) .mine { background:linear-gradient(#8be1ed,#39abc4) !important; color:#073d52 !important; }
+body:has(#auth) .them { background:rgba(220,248,252,.18) !important; }
+body:has(#auth) .row.on,body:has(#auth) #tabs .on { background:rgba(220,248,252,.18) !important; color:#fff !important; }
+body:has(#auth) #menu,body:has(#auth) .sheet { background:rgba(5,72,101,.97) !important; border-radius:3px !important; }
+body:has(#auth) #lab { background:#07506b !important; color:#f4fcff !important; }
+body:has(#auth) .lab-msg.bot,body:has(#auth) .lab-note,body:has(#auth) #req,body:has(#auth) #note { background:rgba(220,248,252,.16) !important; }
