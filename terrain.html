@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Terrain is an iOS customization toolbox for PosterBoard wallpapers, MobileGestalt options, themes, and device files.">
+  <meta name="theme-color" content="#07506b">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="site-aero.css">
+  <title>Terrain — nxtcoreee3</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: #07506b; }
+    body { min-height: 100dvh; overflow-x: hidden; font-family: Arial, Helvetica, sans-serif; }
+    a { color: inherit; }
+    .wrap { width: min(100% - 24px, 660px); margin: 0 auto; padding: 16px 0 32px; }
+    .pack { position: relative; overflow: hidden; padding: 17px; }
+    .top, main, footer { position: relative; z-index: 1; }
+    .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 3px 3px 13px; border-bottom: 2px solid var(--ink); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .brand-mark { width: 29px; height: 29px; overflow: hidden; border: 2px solid var(--ink); border-radius: 50%; }
+    .brand-mark img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .top-note { max-width: 190px; text-align: right; }
+    .hero { position: relative; display: grid; grid-template-columns: 92px 1fr; gap: 16px; align-items: center; padding: 26px 3px 20px; }
+    .app-icon { width: 92px; height: 92px; display: block; object-fit: cover; border: 2px solid var(--ink); border-radius: 19px; box-shadow: 3px 3px 0 var(--ink); transform: rotate(-3deg); }
+    .kicker, .section-kicker { font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin-top: 3px; font-size: clamp(35px, 10vw, 58px); line-height: .9; letter-spacing: -.08em; text-transform: uppercase; }
+    .subtitle { margin-top: 8px; font-size: 12px; font-weight: 800; }
+    .rule { height: 8px; margin: 0 3px 14px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); background: repeating-linear-gradient(135deg, transparent 0 5px, var(--ink) 5px 7px); }
+    .intro { padding: 14px; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+    .intro h2 { margin-top: 4px; font-size: clamp(18px, 4.8vw, 26px); line-height: 1.05; letter-spacing: -.05em; text-transform: uppercase; }
+    .intro p:not(.kicker), .section p { margin-top: 9px; font-size: 12px; line-height: 1.5; }
+    .section { margin-top: 17px; padding: 13px; border: 2px solid var(--ink); }
+    .section h2 { margin-top: 3px; font-size: 23px; line-height: .98; letter-spacing: -.06em; text-transform: uppercase; }
+    .facts { display: grid; gap: 0; margin-top: 12px; border-top: 2px solid var(--ink); }
+    .fact { display: grid; grid-template-columns: 122px 1fr; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 11px; line-height: 1.4; }
+    .fact strong { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
+    .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 17px; }
+    .action { min-height: 45px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 11px; border: 1px solid var(--ink); text-decoration: none; font-size: 11px; font-weight: 800; }
+    .action span { font-size: 18px; }
+    .action.primary { background: rgba(7, 91, 122, .92); }
+    .action:hover, .action:focus-visible { background: rgba(255,255,255,.2); }
+    footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 13px; padding: 10px 2px 0; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    :focus-visible { outline: 3px solid white; outline-offset: 3px; }
+    @media (max-width: 520px) {
+      .wrap { width: min(100% - 16px, 660px); padding: 8px 0 22px; }
+      .pack { padding: 12px; }
+      .top { font-size: 9px; }
+      .top-note { max-width: 145px; }
+      .hero { grid-template-columns: 68px 1fr; gap: 12px; padding: 21px 2px 16px; }
+      .app-icon { width: 68px; height: 68px; border-radius: 14px; }
+      h1 { font-size: 37px; }
+      .intro { padding: 12px; }
+      .intro p:not(.kicker), .section p { font-size: 11px; }
+      .fact { grid-template-columns: 98px 1fr; font-size: 10px; }
+      .actions { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="pack">
+      <header class="top">
+        <a class="brand" href="/" aria-label="nxtcoreee3 home"><span class="brand-mark"><img src="app%20icons/nxtcoreee3-icon-app.png" alt=""></span><span>nxtcoreee3</span></a>
+        <span class="top-note">app profile<br>Terrain</span>
+      </header>
+      <main>
+        <section class="hero" aria-labelledby="terrain-title">
+          <img class="app-icon" src="app%20icons/terrain-icon.png" alt="Terrain app icon">
+          <div><p class="kicker">iOS app</p><h1 id="terrain-title">Terrain</h1><p class="subtitle">iOS customization toolbox</p></div>
+        </section>
+        <div class="rule" aria-hidden="true"></div>
+        <section class="intro" aria-labelledby="summary-title">
+          <p class="kicker">quick summary</p>
+          <h2 id="summary-title">Customize wallpapers, device settings, and more from one iOS app.</h2>
+          <p>Terrain brings PosterBoard wallpaper management and a collection of iOS customization tools into one place.</p>
+        </section>
+        <section class="section" aria-labelledby="about-title">
+          <p class="section-kicker">about the app</p>
+          <h2 id="about-title">What Terrain does</h2>
+          <p>Browse and manage custom PosterBoard wallpaper packs, work with device customization options, and access files and themes through Terrain’s built-in tools.</p>
+          <div class="facts">
+            <div class="fact"><strong>Wallpapers</strong><span>Import `.tendies` packs, browse the integrated catalogs, preview packs, and select wallpapers to apply.</span></div>
+            <div class="fact"><strong>Customization</strong><span>Includes MobileGestalt and other device customization tools. Feature availability depends on your iOS version.</span></div>
+            <div class="fact"><strong>More tools</strong><span>Includes a file browser, theme utilities, and additional iOS-focused features.</span></div>
+            <div class="fact"><strong>Before use</strong><span>Back up your device first. Review the project’s current compatibility notes; some features are limited on certain iOS releases.</span></div>
+          </div>
+        </section>
+        <section class="section" aria-labelledby="fork-title">
+          <p class="section-kicker">project background</p>
+          <h2 id="fork-title">About this fork</h2>
+          <p>Terrain is a community fork of <a href="https://github.com/jailbreakdotparty/Erosion" target="_blank" rel="noopener noreferrer">Erosion</a>, an iOS customization toolbox. It is rebranded and maintained by nxtcoreee3, with Terrain-specific changes such as the integrated <a href="https://www.nxtcoreee3.online/wallpapers">nxtcoreee3 wallpaper source</a>.</p>
+          <div class="facts">
+            <div class="fact"><strong>Upstream project</strong><span><a href="https://github.com/jailbreakdotparty/Erosion" target="_blank" rel="noopener noreferrer">jailbreakdotparty/Erosion</a></span></div>
+            <div class="fact"><strong>Maintainer</strong><span><a href="https://github.com/nxtcoreee3" target="_blank" rel="noopener noreferrer">nxtcoreee3 on GitHub</a></span></div>
+          </div>
+        </section>
+        <nav class="actions" aria-label="Terrain links">
+          <a class="action primary" href="https://github.com/jailbreakdotparty/Erosion" target="_blank" rel="noopener noreferrer">Upstream project <span>↗</span></a>
+          <a class="action" href="/">Back to nxtcoreee3 <span>←</span></a>
+        </nav>
+      </main>
+      <footer><span>Terrain / app profile</span><a href="https://github.com/nxtcoreee3" target="_blank" rel="noopener noreferrer">maintainer ↗</a></footer>
+    </div>
+  </div>
+</body>
+</html>

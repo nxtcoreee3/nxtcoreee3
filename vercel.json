@@ -37,6 +37,16 @@
       "permanent": false
     },
     {
+      "source": "/terrain",
+      "destination": "/terrain.html",
+      "permanent": false
+    },
+    {
+      "source": "/Terrain",
+      "destination": "/terrain.html",
+      "permanent": false
+    },
+    {
       "source": "/Bad-Poster",
       "destination": "/bad-poster.html",
       "permanent": false
