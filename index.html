@@ -53,6 +53,7 @@
     @keyframes airplane-cross { 0% { transform:translate(-110%,-2px) rotate(-3deg); opacity:0; } 7% { opacity:1; } 48% { transform:translate(47vw,-20px) rotate(-1deg); opacity:1; } 92% { opacity:1; } 100% { transform:translate(112vw,-5px) rotate(1deg); opacity:0; } }
     @media (max-width:420px) { .fine-footer { flex-wrap:wrap; }.sound-toggle { order:3; width:100%; justify-content:center; } }
     .eol-modal[hidden] { display:none; }.eol-modal { position:fixed; inset:0; z-index:40; display:grid; place-items:center; padding:12px; background:rgba(0,35,58,.76); }.eol-dialog { width:min(100%,400px); padding:14px; border:1px solid #517889; background:#edf6f7; color:#173e54; text-shadow:none; }.eol-dialog h2 { margin-top:4px; color:#174e67; font-size:22px; }.eol-dialog p:not(.eyebrow) { margin-top:8px; padding:8px; border:1px solid #bdcdd2; background:white; color:#345665; font-size:13px; line-height:1.45; }.eol-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:10px; }.eol-action { min-height:42px; display:grid; place-items:center; padding:5px 8px; border:1px solid #91abb5; background:linear-gradient(#fff,#dce9ec); color:#15516b; font-size:11px; font-weight:bold; text-align:center; text-decoration:none; }.eol-action.primary { background:#c9e9ed; }
+    .nitera-modal[hidden] { display:none; }.nitera-modal { position:fixed; inset:0; z-index:60; display:grid; place-items:center; padding:12px; background:rgba(0,35,58,.76); }.nitera-dialog { width:min(100%,410px); padding:16px; border:1px solid #517889; background:#edf6f7; color:#173e54; text-shadow:none; box-shadow:0 8px 32px rgba(0,0,0,.5); }.nitera-dialog h2 { margin-top:4px; color:#174e67; font-size:20px; font-weight:bold; }.nitera-desc { margin-top:8px; padding:10px; border:1px solid #bdcdd2; background:white; color:#345665; font-size:13px; line-height:1.45; }.nitera-toggle-wrap { display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:11px; color:#32576b; cursor:pointer; user-select:none; }.nitera-toggle-wrap input { width:15px; height:15px; margin:0; cursor:pointer; accent-color:#087db3; }.nitera-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:12px; }.nitera-btn { min-height:40px; display:grid; place-items:center; padding:5px 8px; border:1px solid #91abb5; background:linear-gradient(#fff,#dce9ec); color:#15516b; font-size:11px; font-weight:bold; text-align:center; text-decoration:none; cursor:pointer; }.nitera-btn:hover { background:#e8f4f7; }.nitera-btn.primary { background:#c9e9ed; border-color:#659eaf; color:#0e4359; }.nitera-btn.primary:hover { background:#b6e1e7; }
     :focus-visible { outline:2px solid white; outline-offset:2px; }
     @media (max-width:420px) { .site { width:calc(100% - 16px); margin-top:6px; }.masthead { min-height:42px; }.brand { font-size:14px; }.brand-icon { width:26px; height:26px; }.masthead-note { max-width:130px; font-size:9px; }.main-nav a { min-height:44px; font-size:10px; }.hero { grid-template-columns:minmax(0,1fr) 52px; padding:10px 1px; }.hero-icon { width:48px; height:48px; }.hero h1 { font-size:30px; }.hero-bio { font-size:12px; }.butterfly-orange { right:62px; width:20px; }.butterfly-pink { width:22px; }.social-list { grid-template-columns:repeat(2,minmax(0,1fr)); }.social { min-height:44px; font-size:11px; }.item-card { min-height:64px; }.eol-actions { grid-template-columns:1fr; } }
     @media (max-width:360px) { .masthead-note { max-width:105px; }.main-nav a { font-size:9px; }.hero { grid-template-columns:minmax(0,1fr) 44px; }.hero-icon { width:42px; height:42px; }.butterfly-orange { right:52px; width:18px; } }
@@ -178,6 +179,27 @@
       <h2 id="wafflestore-eol-title">WaffleStore is EoL</h2>
       <p>WaffleStore is currently end of life and its old builds no longer work because Apple changed its authentication backend.</p>
       <div class="eol-actions"><a class="eol-action primary" href="/wafflestore">Read more</a><a class="eol-action" href="https://github.com/nxtcoreee3/WaffleStore" target="_blank" rel="noopener noreferrer">Continue anyways</a></div>
+    </div>
+  </div>
+
+  <div class="nitera-modal" id="nitera-popup-modal" role="dialog" aria-modal="true" aria-labelledby="nitera-popup-title" hidden>
+    <div class="nitera-dialog">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <p class="eyebrow" style="color:#0f5879;margin:0;">Nitera sponsorship</p>
+        <button type="button" id="nitera-x-btn" aria-label="Close" style="border:none;background:transparent;cursor:pointer;font-size:16px;color:#356073;line-height:1;padding:2px 4px;">✕</button>
+      </div>
+      <h2 id="nitera-popup-title">iOS Signing Certificates</h2>
+      <p class="nitera-desc">
+        Get cheap and reliable signing certificates with Nitera. Use this link and support me and my projects, aswell as future giveaways!
+      </p>
+      <label class="nitera-toggle-wrap">
+        <input type="checkbox" id="nitera-never-show">
+        <span>Never show this again</span>
+      </label>
+      <div class="nitera-actions">
+        <a class="nitera-btn primary" id="nitera-go-btn" href="/nitera">Use this link ↗</a>
+        <button type="button" class="nitera-btn" id="nitera-close-btn">No thanks</button>
+      </div>
     </div>
   </div>
 
@@ -317,6 +339,49 @@
       };
       await update();
       window.setInterval(update, 30000);
+    })();
+
+    (() => {
+      const modal = document.getElementById('nitera-popup-modal');
+      const neverBox = document.getElementById('nitera-never-show');
+      const closeBtn = document.getElementById('nitera-close-btn');
+      const xBtn = document.getElementById('nitera-x-btn');
+      const goBtn = document.getElementById('nitera-go-btn');
+      if (!modal || !neverBox || !closeBtn) return;
+
+      try {
+        if (localStorage.getItem('nxtcoreee3-nitera-popup-dismissed') === 'never') return;
+      } catch (_) {}
+
+      window.setTimeout(() => {
+        modal.hidden = false;
+      }, 700);
+
+      const dismiss = () => {
+        modal.hidden = true;
+        if (neverBox.checked) {
+          try { localStorage.setItem('nxtcoreee3-nitera-popup-dismissed', 'never'); } catch (_) {}
+        }
+      };
+
+      closeBtn.addEventListener('click', dismiss);
+      if (xBtn) xBtn.addEventListener('click', dismiss);
+      if (goBtn) {
+        goBtn.addEventListener('click', () => {
+          if (neverBox.checked) {
+            try { localStorage.setItem('nxtcoreee3-nitera-popup-dismissed', 'never'); } catch (_) {}
+          }
+          modal.hidden = true;
+        });
+      }
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) dismiss();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) dismiss();
+      });
     })();
   </script>
 </body>
