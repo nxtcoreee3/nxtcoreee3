@@ -1264,8 +1264,12 @@ body {
     padding: 20px;
   }
   .collab-connection {
-    transform: rotate(90deg);
-    margin: 4px 0;
+    flex-direction: row;
+    gap: 10px;
+    margin: 0;
+  }
+  .connection-label {
+    writing-mode: horizontal-tb;
   }
   .nav-links {
     display: none;
