@@ -80,6 +80,16 @@
       "source": "/sprite",
       "destination": "/sprite.html",
       "permanent": false
+    },
+    {
+      "source": "/nitera",
+      "destination": "/nitera/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/Nitera",
+      "destination": "/nitera/index.html",
+      "permanent": false
     }
   ],
   "rewrites": [
